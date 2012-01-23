@@ -67,7 +67,14 @@ td { vertical-align: top; }
    ========================================================================== */
 
 
-
+[data-type=editable]{
+  border-bottom: 1px dotted #369;
+}
+[data-type=editable] input{
+  width:75px;
+  border-width:0;
+  border-bottom:1px solid #369;
+}
 
 
 
