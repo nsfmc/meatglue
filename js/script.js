@@ -12,10 +12,6 @@ $(document).ready(function(){
       if(this.init){ this.init(); }
     },
 
-    redraw: function(){
-      // if (this.update) { this.update(); }
-    },
-    
   }
 
   // gather all the vars on the page
