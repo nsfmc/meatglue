@@ -1,4 +1,4 @@
-/* Author: 
+/* Author: Marcos Ojeda <marcos@khanacademy.org>
 
 */
 
@@ -14,10 +14,6 @@ $(document).ready(function(){
 
     redraw: function(){
       // if (this.update) { this.update(); }
-      // for(var i=0; i<this.vars.length; i+=1){
-      //   var k = this.vars[i];
-      //   $("[data-name='"+k+"']").text(this.get(k))
-      // }
     },
     
   }
@@ -60,6 +56,7 @@ $(document).ready(function(){
     return (callback !== undefined) ? callback(callbackScope) : callbackScope;
   }
 
+  // evaluate all the trapper scripts in a protected context
   var defaultSrc = $("script[type='trapper/script']");
   if (defaultSrc){
     try {
@@ -69,28 +66,25 @@ $(document).ready(function(){
       }
     }
     catch(e) { 
-      console.error("omg wtf problem with trapper script")
+      console.error("omg wtf problem with trapper script:", e);
     }
   }
 
   var TrapperKeeper = Backbone.Model.extend(trapper);
 
-  binder = new TrapperKeeper;
+  var binder = new TrapperKeeper;
 
   var VarView = Backbone.View.extend({ 
-    model: binder, 
 
     initialize: function(){
       if(this.model.update){
-        this.model.bind("change", this.render)
+        this.model.bind("change", this.render, this)
       }
     },
 
     render: function(){
-      console.log("render VarView")
       var name = $(this.el).data("name");
       var value = this.model.get(name);
-      console.log("render: ", name, value)
       $(this.el).text(value)
       return this;
     }
@@ -109,22 +103,25 @@ $(document).ready(function(){
       $(this.el).html($("<input />").attr({'type':"text", 'value':val}));
 
       var that = this;
-      this.$("input").focus().on("blur", function(){ that.saveState(3)})
-      console.log("heh")
+      this.$("input").focus().on("blur", function(){ that.saveState()})
     },
 
     saveState: function(evt){
       var name = $(this.el).data("name");
       var val = this.$("input").val();
+
+      // is it a number?
+      val = (Number(val) === NaN) ? val : Number(val);
+
       var tosave = {};
       tosave[name] = val;
 
       this.model.set(tosave);
+      if(this.model.update){ this.model.update(); }
       this.render()
     },
 
     render: function(){
-      console.log("rendertastic!")
       var name = $(this.el).data("name");
       var val = this.model.get(name);
       if (this.$("input:focus").length === 0){
@@ -134,8 +131,9 @@ $(document).ready(function(){
     }
   });
 
+	// map across all vars and assign them views
   _.map( $("var[data-name]", $("#equation")), function(e){
-    var bundle = {el: $(e)};
+    var bundle = {el: $(e), model: binder};
     if($(e).data("type") === "editable"){
       var inst = new EditableVar( bundle )
     }

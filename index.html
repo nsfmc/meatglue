@@ -39,7 +39,11 @@
         var defaults = {
             "CELCIUS" : 23
         }
+        // var events = {
+        //     "change:CELCIUS" : "update"
+        // }
         var update = function(){
+            console.log("hi from update")
             this.set({"FARENHEIT": (this.get("CELCIUS") * 9 / 5 ) + 32 });
         }
         var init = function(){
