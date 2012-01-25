@@ -28,26 +28,37 @@
     </header>
     <div id="main" role="main">
 
-      <div id="equation" class="tangly">
-        <p><var data-name="CELCIUS"></var>°C = <var data-name="FARENHEIT"></var>°F </p>
-        <p><var data-name="CELCIUS" data-type="editable"></var>
+      <div class="tangly" data-section="starting-off">
+        <p> In general, the conversion between celcius and farenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <var data-name="CELCIUS"></var>°C = <var data-name="FARENHEIT"></var>°F </p>
+        <p>What temperature, in degrees celcius, would we need to get to <var data-name="FEXPECTED"></var>°F? Change this value here: <var data-name="CELCIUS" data-type="editable"></var>°C
       </div>
+
+      <div class="tangly" data-section="first-win">
+        <p>Great! <var data-name="CELCIUS"></var>°C is the right value.</p>
+      </div>
+
     </div>
 
     <script type="trapper/script">
-
+        // these should refer to a var with an associated data-name
         var defaults = {
-            "CELCIUS" : 23
+          "CELCIUS" : 23,
+          "FEXPECTED" : 149
         }
-        // var events = {
-        //     "change:CELCIUS" : "update"
-        // }
+
         var update = function(){
-            console.log("hi from update")
-            this.set({"FARENHEIT": (this.get("CELCIUS") * 9 / 5 ) + 32 });
+          var celcius = this.get("CELCIUS");
+          var fExpected = this.get("FEXPECTED");
+
+          this.set({"FARENHEIT": (celcius * 9 / 5 ) + 32 });
+          if(this.get("FARENHEIT") == fExpected){
+            this.reveal("first-win");
+          }
         }
+
         var init = function(){
-            this.update();
+          this.update();
+          this.reveal("starting-off");
         }
 
     </script>

@@ -63,9 +63,10 @@ td { vertical-align: top; }
 
 
 /* ==|== primary styles =====================================================
-   Author: 
+   Author: Marcos Ojeda
    ========================================================================== */
 
+.invalid input, .invalid textarea { background-color: #f0dddd; }
 
 [data-type=editable]{
   border-bottom: 1px dotted #369;
@@ -75,7 +76,9 @@ td { vertical-align: top; }
   border-width:0;
   border-bottom:1px solid #369;
 }
-
+.tangly {
+  display:none;
+}
 
 
 

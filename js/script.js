@@ -1,5 +1,7 @@
 /* Author: Marcos Ojeda <marcos@khanacademy.org>
 
+TODO show-guess and 
+
 */
 
 $(document).ready(function(){
@@ -12,10 +14,14 @@ $(document).ready(function(){
       if(this.init){ this.init(); }
     },
 
+    reveal: function( section ){
+      $(".tangly[data-section=" + section + "]:hidden").show()
+    }
+
   }
 
   // gather all the vars on the page
-  _.map( $("var[data-name]", $("#equation")), function(e){
+  $("var[data-name]", $(".tangly")).each( function(i, e){
     $el = $(e);
     var name = $el.data("name");
     trapper.vars.push(name);
@@ -25,6 +31,7 @@ $(document).ready(function(){
   // http://stackoverflow.com/questions/543533/restricting-eval-to-a-narrow-scope
   // and also
   // http://www.yuiblog.com/blog/2006/04/11/with-statement-considered-harmful/
+  // evaluates some text in the context of an empty scope var
   var scopedEval = function( src, propWhitelist, callback){
     var scope = {};
     for (prop in this){ if (prop !== "console") scope[prop] = undefined; }
@@ -37,8 +44,8 @@ $(document).ready(function(){
     // eval in scope
     (new Function( "with(this) { "+ src +"};" )).call(scope);
 
-    // execute callback with scope
     if(propWhitelist !== undefined){
+      // cleanse any global vars made in the scope not in the whitelist
       var callbackScope = {};
       for(var i=0; i<propWhitelist.length; i+=1){
         callbackScope[propWhitelist[i]] = scope[propWhitelist[i]];
@@ -47,7 +54,6 @@ $(document).ready(function(){
     else{
       var callbackScope = $.extend({}, scope)
     }
-
     // either return the restricted scope the code ran in or it fed through a callback
     return (callback !== undefined) ? callback(callbackScope) : callbackScope;
   }
@@ -96,7 +102,7 @@ $(document).ready(function(){
     toggleEdit: function(){
       var name = $(this.el).data("name");
       var val = this.model.get(name);
-      $(this.el).html($("<input />").attr({'type':"text", 'value':val}));
+      $(this.el).html($("<input />").attr({'value':val}));
 
       var that = this;
       this.$("input").focus().on("blur", function(){ that.saveState()})
@@ -107,14 +113,19 @@ $(document).ready(function(){
       var val = this.$("input").val();
 
       // is it a number?
-      val = (Number(val) === NaN) ? val : Number(val);
+      if(isNaN(Number(val))){
+        // this may be handled otherwise
+        $(this.el).addClass("invalid")
+      }else{
+        $(this.el).removeClass("invalid")
+        val = Number(val);
+        var tosave = {};
+        tosave[name] = val;
 
-      var tosave = {};
-      tosave[name] = val;
-
-      this.model.set(tosave);
-      if(this.model.update){ this.model.update(); }
-      this.render()
+        this.model.set(tosave);
+        if(this.model.update){ this.model.update(); }
+        this.render()
+      }
     },
 
     render: function(){
@@ -128,7 +139,7 @@ $(document).ready(function(){
   });
 
 	// map across all vars and assign them views
-  _.map( $("var[data-name]", $("#equation")), function(e){
+  $("var[data-name]", $(".tangly")).each( function(i, e){
     var bundle = {el: $(e), model: binder};
     if($(e).data("type") === "editable"){
       var inst = new EditableVar( bundle )
@@ -137,7 +148,7 @@ $(document).ready(function(){
       var inst = new VarView( bundle )
     }
     inst.render()
-  })
+  });
 
 })
 
