@@ -138,14 +138,40 @@ $(document).ready(function(){
     }
   });
 
+  var SlidableVar = VarView.extend({
+    events: {
+      "vmousedown" : "foo",
+      "vmousemove" : "bar"
+    },
+    
+    foo: function(evt){
+      console.log("bam!",evt)
+    },
+    bar: function(evt){
+      console.log("yeah!", evt)
+    },
+    
+    render: function(){
+      var name = $(this.el).data("name");
+      var val = this.model.get(name);
+      $(this.el).text(val);
+      return this;
+    }
+  })
+
+
   // map across all vars and assign them views
   $("var[data-name]", $(".tangly")).each( function(i, e){
     var bundle = {el: $(e), model: binder};
-    if($(e).data("type") === "editable"){
-      var inst = new EditableVar( bundle )
+    var type = $(e).data("type");
+    if (type === "editable"){
+      var inst = new EditableVar( bundle );
+    }
+    else if (type == "slidable"){
+      var inst = new SlidableVar( bundle );
     }
     else{
-      var inst = new VarView( bundle )
+      var inst = new VarView( bundle );
     }
     inst.render()
   });

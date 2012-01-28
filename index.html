@@ -30,12 +30,12 @@
 
       <div class="tangly" data-section="starting-off">
         <p> In general, the conversion between celcius and farenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <var data-name="CELCIUS"></var>°C = <var data-name="FARENHEIT"></var>°F </p>
-        <p>What temperature, in degrees celcius, would we need to get to <var data-name="FEXPECTED"></var>°F? Change this value here: <var data-name="CELCIUS" data-type="editable"></var>°C
+        <p>What temperature, in degrees celcius, would we need to get to <var data-name="FEXPECTED"></var>°F? Change this value here: <var data-name="CELCIUS" data-type="slidable"></var>°C
       </div>
 
       <div class="tangly" data-section="first-win">
         <p>Great! <var data-name="CELCIUS"></var>°C is the right value.</p>
-        <p>let's see what happens here:<var data-name="blerg"></var> ==> <var data-name="foo"></var>
+        <p>let's see what happens here:<var data-name="blerg" data-type="slidable"></var> ==> <var data-name="foo"></var>
       </div>
 
     </div>
@@ -75,7 +75,6 @@
   <script src="js/libs/backbone-min.js"></script>
   <script src="js/libs/jquery-ui-1.8.16.custom.min.js"></script>
   <script src="js/libs/jquery.mobile.vmouse.js"></script>
-  <script> $.mobile.autoInitializePage = false; </script>
 
   <!-- scripts concatenated and minified via ant build script-->
   <script defer src="js/plugins.js"></script>

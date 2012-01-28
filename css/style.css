@@ -68,7 +68,7 @@ td { vertical-align: top; }
 
 .invalid input, .invalid textarea { background-color: #f0dddd; }
 
-[data-type=editable]{
+[data-type=editable], [data-type=slidable]{
   border-bottom: 1px dotted #369;
 }
 [data-type=editable] input{
@@ -76,6 +76,11 @@ td { vertical-align: top; }
   border-width:0;
   border-bottom:1px solid #369;
 }
+
+[data-type=slidable]{
+
+}
+
 .tangly {
   display:none;
 }
