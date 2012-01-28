@@ -1,6 +1,6 @@
 /* Author: Marcos Ojeda <marcos@khanacademy.org>
 
-TODO show-guess and 
+TODO show-guess support from khan-exercises needs to be added in
 
 */
 
@@ -138,7 +138,7 @@ $(document).ready(function(){
     }
   });
 
-	// map across all vars and assign them views
+  // map across all vars and assign them views
   $("var[data-name]", $(".tangly")).each( function(i, e){
     var bundle = {el: $(e), model: binder};
     if($(e).data("type") === "editable"){
