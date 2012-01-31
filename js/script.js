@@ -139,31 +139,67 @@ $(document).ready(function(){
   });
 
   var SlidableVar = VarView.extend({
-    events: {
-      "vmousedown" : "foo",
-      "vmousemove" : "bar"
-    },
-    
-    foo: function(evt){
-      console.log("bam!",evt)
-    },
-    bar: function(evt){
-      console.log("yeah!", evt)
-    },
-    
-    render: function(){
+
+    initialize: function(){
       var name = $(this.el).data("name");
       var val = this.model.get(name);
-      $(this.el).text(val);
-      return this;
+      VarView.prototype.initialize.call(this)
+      $(this.el).slidable({'value': val, 'model': this.model});
+    },
+
+    render: function(){
+      return VarView.prototype.render.call(this)
     }
   })
 
 
+  $.widget( "ka.slidable", $.ui.mouse, {
+    _create:function(){
+      this._mouseInit();
+    },
+    destroy: function(){
+      this._mouseDestroy();
+      $.Widget.prototype.destroy.call( this );
+    },
+
+    // defaults at zero, with a min/max of 100
+    options: { value: 0, min:-100, max:100, width:10, model:{} },
+    _setOption: function( k, v ){
+      $.Widget.prototype._setOption.apply( this, arguments );
+    },
+    setValue: function( value ){
+      if (value < this.options.min) {
+        this.options.value = this.options.min;
+      }else if (value > this.options.max) {
+        this.options.value = this.options.max;
+      }else{
+        this.options.value = value;
+        var name = this.element.data("name")
+        this.options.model.set(name, value)
+        if (this.options.model.update) { this.options.model.update() }
+      }
+    },
+
+    _mouseStart: function(evt){
+      this.clickStart = evt.pageX;
+      this.value = this.options.value;
+      $("html").addClass("sliding")
+    },
+    _mouseStop: function(){
+      $("html").removeClass("sliding")
+    },
+    _mouseDrag: function(evt){
+      var apparentValue = Math.floor(this.value + (evt.pageX - this.clickStart) / this.options.width);
+      this.setValue( apparentValue );
+    }
+
+  })
+
+
   // map across all vars and assign them views
-  $("var[data-name]", $(".tangly")).each( function(i, e){
-    var bundle = {el: $(e), model: binder};
-    var type = $(e).data("type");
+  _( $( "var[data-name]", $( ".tangly" ) ) ).each( function(elt, idx){
+    var bundle = {el: $(elt), model: binder};
+    var type = $(elt).data("type");
     if (type === "editable"){
       var inst = new EditableVar( bundle );
     }

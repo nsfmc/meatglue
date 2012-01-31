@@ -30,7 +30,7 @@
 
       <div class="tangly" data-section="starting-off">
         <p> In general, the conversion between celcius and farenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <var data-name="CELCIUS"></var>°C = <var data-name="FARENHEIT"></var>°F </p>
-        <p>What temperature, in degrees celcius, would we need to get to <var data-name="FEXPECTED"></var>°F? Change this value here: <var data-name="CELCIUS" data-type="slidable"></var>°C
+        <p>What temperature, in degrees celcius, would we need to get to <var data-name="FEXPECTED"></var>°F? Change this value here: <var data-name="CELCIUS" data-type="editable"></var>°C
       </div>
 
       <div class="tangly" data-section="first-win">
@@ -45,18 +45,20 @@
         var defaults = {
           "CELCIUS" : 23,
           "FEXPECTED" : 149,
-          "blerg" : 14,
+          "blerg" : 12,
+          "foo" : 14,
         }
 
         var update = function(){
           var celcius = this.get("CELCIUS");
           var fExpected = this.get("FEXPECTED");
+          var blerg = this.get("blerg");
 
           this.set({"FARENHEIT": (celcius * 9 / 5 ) + 32 });
           if(this.get("FARENHEIT") == fExpected){
             this.reveal("first-win");
-            
           }
+          this.set({"foo": blerg * 3});
         }
 
         var init = function(){
@@ -71,8 +73,8 @@
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
-  <script src="js/libs/underscore-min.js"></script>
-  <script src="js/libs/backbone-min.js"></script>
+  <script src="js/libs/underscore.js"></script>
+  <script src="js/libs/backbone.js"></script>
   <script src="js/libs/jquery-ui-1.8.16.custom.min.js"></script>
   <script src="js/libs/jquery.mobile.vmouse.js"></script>
 

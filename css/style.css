@@ -76,11 +76,9 @@ td { vertical-align: top; }
   border-width:0;
   border-bottom:1px solid #369;
 }
-
-[data-type=slidable]{
-
+.sliding, [data-type=slidable]{
+  cursor: EW-resize;
 }
-
 .tangly {
   display:none;
 }
