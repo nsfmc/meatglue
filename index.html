@@ -26,7 +26,7 @@
     <header>
 
     </header>
-    <div id="main" role="main">
+    <div id="main" role="main" class="">
 
       <div class="tangly" data-section="starting-off">
         <p> In general, the conversion between celcius and farenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <var data-name="CELCIUS"></var>°C = <var data-name="FARENHEIT"></var>°F </p>
@@ -38,6 +38,27 @@
         <p>let's see what happens here:<var data-name="blerg" data-type="slidable"></var> ==> <var data-name="foo"></var>
       </div>
 
+      <div class="tangly" data-section="ratios">
+        <p>Fun with ratios! A : B :: C : D
+        <p>Here are some variables to drag around: 
+          <var data-name="A" data-type="draggable"></var>
+          <var data-name="B" data-type="draggable"></var>
+          <var data-name="C" data-type="draggable"></var>
+          <var data-name="D" data-type="draggable"></var>
+        </p>
+        <p>Here are some targets:
+          <var data-name="target1" data-type="target"></var>:
+          <var data-name="target2" data-type="target"></var>::
+          <var data-name="target3" data-type="target"></var>:
+          <var data-name="target4" data-type="target"></var>
+
+      </div>
+      
+      <div class="tangly" data-section="ratio-success">
+        <p> Booyeah!
+      </div>
+
+
     </div>
 
     <script type="trapper/script">
@@ -47,6 +68,10 @@
           "FEXPECTED" : 149,
           "blerg" : 12,
           "foo" : 14,
+          "A":3,
+          "B":4,
+          "C":12,
+          "D":16
         }
 
         var update = function(){
@@ -56,14 +81,20 @@
 
           this.set({"FARENHEIT": (celcius * 9 / 5 ) + 32 });
           if(this.get("FARENHEIT") == fExpected){
-            this.reveal("first-win");
+            // TODO unbind behaviors once you pass validation here?
+            // this.reveal("first-win");
           }
+          // if()
           this.set({"foo": blerg * 3});
+          console.log("update says:", this.get("target1"))
+          if(this.get("target1") / this.get("target2") == this.get("target3") / this.get("target4")){
+            this.reveal("ratio-success")
+          }
         }
 
         var init = function(){
           this.update();
-          this.reveal("starting-off");
+          this.reveal("first-win");
         }
 
     </script>

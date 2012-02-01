@@ -1,6 +1,7 @@
 /* Author: Marcos Ojeda <marcos@khanacademy.org>
 
 TODO show-guess support from khan-exercises needs to be added in
+TODO problems that use the same data but over multiple questions
 
 */
 
@@ -152,6 +153,37 @@ $(document).ready(function(){
     }
   })
 
+  var DraggableVar = VarView.extend({
+    initialize: function(){
+    },
+    render: function(){
+      var name = $(this.el).data("name");
+      this.$el.text(name);
+      this.$el.draggable();
+    }
+  })
+
+  var DroppableVar = VarView.extend({
+    initialize: function(){
+    },
+    render: function(){
+      var name = $(this.el).data("name");
+      this.$el.text(name);
+      var that = this;
+      var dropAction = function(e,u){
+        // dropping a var onto the droppable causes the target to 
+        // inherit the value of the droppable 
+        // TODO remove redundant elements (i.e. dropping a second elements should clear out the first)
+        var droppedVar = $(u.draggable).data("name");
+        var droppedVal = that.model.get(droppedVar);
+        var targetName = $(this).data("name");
+        that.model.set(targetName, droppedVal);
+        if(that.model.update) { that.model.update(); }
+      };
+      this.$el.droppable({drop: dropAction});
+    }
+  })
+
 
   $.widget( "ka.slidable", $.ui.mouse, {
     _create:function(){
@@ -163,6 +195,7 @@ $(document).ready(function(){
     },
 
     // defaults at zero, with a min/max of 100
+    // make sure these are settable via data-attrs?
     options: { value: 0, min:-100, max:100, width:10, model:{} },
     _setOption: function( k, v ){
       $.Widget.prototype._setOption.apply( this, arguments );
@@ -206,6 +239,13 @@ $(document).ready(function(){
     else if (type == "slidable"){
       var inst = new SlidableVar( bundle );
     }
+    else if (type == "draggable"){
+      var inst = new DraggableVar( bundle );
+    }
+    else if (type == "target"){
+      var inst = new DroppableVar( bundle );
+    }
+    
     else{
       var inst = new VarView( bundle );
     }

@@ -79,8 +79,28 @@ td { vertical-align: top; }
 .sliding, [data-type=slidable]{
   cursor: EW-resize;
 }
+[data-type=draggable], [data-type=target]{
+  background-color:rgb(207, 232, 236);
+  color:rgb(93, 146, 163);
+  padding: 3px 6px;
+  font-style:normal;
+  font-weight:bold;
+  cursor:move;
+  -webkit-border-radius: 4px;
+  -webkit-box-shadow:-2px 2px 1px #aaa;
+}
+[data-type=target]{
+  color:transparent;
+  border:2px dotted rgb(93, 146, 163);
+  background-color: rgb(235,245,255);
+  display:inline-block;
+  -webkit-box-shadow:0px 0px 1px #aaa;
+}
 .tangly {
   display:none;
+}
+.debug .tangly {
+  display:block;
 }
 
 
