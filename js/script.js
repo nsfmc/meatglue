@@ -22,7 +22,7 @@ $(document).ready(function(){
   }
 
   // gather all the vars on the page
-  $("var[data-name]", $(".tangly")).each( function(i, e){
+  $("span[data-name]", $(".tangly")).each( function(i, e){
     $el = $(e);
     var name = $el.data("name");
     trapper.vars.push(name);
@@ -35,7 +35,7 @@ $(document).ready(function(){
   // evaluates some text in the context of an empty scope var
   var scopedEval = function( src, propWhitelist, callback){
     var scope = {};
-    for (prop in this){ if (prop !== "console") scope[prop] = undefined; }
+    for (prop in this){ if (prop !== "console" || prop !== "KhanUtil") scope[prop] = undefined; }
 
     // capture whitelisted properties in scope if defined
     if(propWhitelist !== undefined){
@@ -86,9 +86,9 @@ $(document).ready(function(){
     },
 
     render: function(){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       var value = this.model.get(name);
-      $(this.el).text(value)
+      this.$el.text(value)
       return this;
     }
   });
@@ -101,24 +101,24 @@ $(document).ready(function(){
     },
 
     toggleEdit: function(){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       var val = this.model.get(name);
-      $(this.el).html($("<input />").attr({'value':val}));
+      this.$el.html($("<input />").attr({'value':val}));
 
       var that = this;
       this.$("input").focus().on("blur", function(){ that.saveState()})
     },
 
     saveState: function(evt){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       var val = this.$("input").val();
 
       // is it a number?
       if(isNaN(Number(val))){
         // this may be handled otherwise
-        $(this.el).addClass("invalid")
+        this.$el.addClass("invalid")
       }else{
-        $(this.el).removeClass("invalid")
+        this.$el.removeClass("invalid")
         val = Number(val);
         var tosave = {};
         tosave[name] = val;
@@ -130,10 +130,10 @@ $(document).ready(function(){
     },
 
     render: function(){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       var val = this.model.get(name);
       if (this.$("input:focus").length === 0){
-        $(this.el).text(val);
+        this.$el.text(val);
       }
       return this;
     }
@@ -142,10 +142,10 @@ $(document).ready(function(){
   var SlidableVar = VarView.extend({
 
     initialize: function(){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       var val = this.model.get(name);
       VarView.prototype.initialize.call(this)
-      $(this.el).slidable({'value': val, 'model': this.model});
+      this.$el.slidable({'value': val, 'model': this.model});
     },
 
     render: function(){
@@ -157,7 +157,7 @@ $(document).ready(function(){
     initialize: function(){
     },
     render: function(){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       this.$el.text(name);
       this.$el.draggable();
     }
@@ -167,7 +167,7 @@ $(document).ready(function(){
     initialize: function(){
     },
     render: function(){
-      var name = $(this.el).data("name");
+      var name = this.$el.data("name");
       this.$el.text(name);
       var that = this;
       var dropAction = function(e,u){
@@ -230,7 +230,7 @@ $(document).ready(function(){
 
 
   // map across all vars and assign them views
-  _( $( "var[data-name]", $( ".tangly" ) ) ).each( function(elt, idx){
+  _( $( "span[data-name]", $( ".tangly" ) ) ).each( function(elt, idx){
     var bundle = {el: $(elt), model: binder};
     var type = $(elt).data("type");
     if (type === "editable"){
