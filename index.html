@@ -47,10 +47,10 @@
           <span data-name="D" data-type="draggable"></span>
         </p>
         <p>Here are some targets:
-          <span data-name="target1" data-type="target"></span>:
-          <span data-name="target2" data-type="target"></span>::
-          <span data-name="target3" data-type="target"></span>:
-          <span data-name="target4" data-type="target"></span>
+          <span data-name="target1" data-type="droppable"></span>:
+          <span data-name="target2" data-type="droppable"></span>::
+          <span data-name="target3" data-type="droppable"></span>:
+          <span data-name="target4" data-type="droppable"></span>
 
       </div>
       
@@ -59,58 +59,64 @@
         
       </div>
 
+	    <script type="text/meatglue">
+	        // these should refer to a var with an associated data-name
+	        defaults = {
+	          "CELCIUS" : 23,
+	          "FEXPECTED" : 149,
+	          "blerg" : 12,
+	          "foo" : 14,
+	          "A":3,
+	          "B":4,
+	          "C":12,
+	          "D":16
+	        }
+
+	        update = function(){
+	          var celcius = this.get("CELCIUS");
+	          var fExpected = this.get("FEXPECTED");
+	          var blerg = this.get("blerg");
+
+	          this.set({"FARENHEIT": (celcius * 9 / 5 ) + 32 });
+	          if(this.get("FARENHEIT") == fExpected){
+	            // TODO unbind behaviors once you pass validation here?
+	            // this.reveal("first-win");
+	          }
+	          // if()
+	          this.set({"foo": blerg * 3});
+	          // console.log("update says:", this.get("target1"))
+	          var t1 = this.getget("target1");
+	          var t2 = this.getget("target2");
+	          var t3 = this.getget("target3");
+	          var t4 = this.getget("target4");
+	          var a = this.get("A");
+	          var b = this.get("B")
+						console.log(t1/t2 === t3/t4, [t1,t2,t3,t4])
+	          if(t1/t2 === t3/t4 && t1/t2 === a/b){
+	            this.reveal("ratio-success")
+							$("[data-section='ratio-success']").html("<p>Ratio Success!</p>")
+	          }else{
+	          	$("[data-section='ratio-success']").html("<p>Make the ratio work!")
+	          }
+	        }
+
+	        init = function(){
+	          this.update();
+	          this.reveal("ratios");
+	        }
+
+	    </script>
+
 
     </div>
 
-    <script type="text/meatglue">
-        // these should refer to a var with an associated data-name
-        var defaults = {
-          "CELCIUS" : 23,
-          "FEXPECTED" : 149,
-          "blerg" : 12,
-          "foo" : 14,
-          "A":3,
-          "B":4,
-          "C":12,
-          "D":16
-        }
-
-        var update = function(){
-          var celcius = this.get("CELCIUS");
-          var fExpected = this.get("FEXPECTED");
-          var blerg = this.get("blerg");
-
-          this.set({"FARENHEIT": (celcius * 9 / 5 ) + 32 });
-          if(this.get("FARENHEIT") == fExpected){
-            // TODO unbind behaviors once you pass validation here?
-            // this.reveal("first-win");
-          }
-          // if()
-          this.set({"foo": blerg * 3});
-          // console.log("update says:", this.get("target1"))
-          var t1 = this.get("target1");
-          var t2 = this.get("target2");
-          var t3 = this.get("target3");
-          var t4 = this.get("target4");
-          var a = this.get("A");
-          var b = this.get("B")
-          if(t1/t2 === t3/t4 && t1/t2 === a/b){
-            this.reveal("ratio-success")
-          }
-        }
-
-        var init = function(){
-          this.update();
-          this.reveal("ratios");
-        }
-
-    </script>
+    
 
   </div> <!--! end of #container -->
 
 
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\/script>')</script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+  <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.js"><\/script>')</script>
   <script src="js/libs/underscore.js"></script>
   <script src="js/libs/backbone.js"></script>
   <script src="js/libs/jquery-ui-1.8.16.custom.min.js"></script>

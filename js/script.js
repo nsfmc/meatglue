@@ -34,6 +34,12 @@ Requires:
       }
     },
 
+    getget: function(varName){
+      // for droppables, their value is the value of the thing dropped on them
+      // but maybe you want the value the dropped object represents
+      return this.get(this.get(varName));
+    },
+
     inheritExerciseVars: function(){
       // absorb the exercise's variables
       var ev = KhanUtil.tmpl.getVARS();
@@ -313,25 +319,26 @@ Requires:
   var bindMeat = function (elt, idx, binder){
     var bundle = {el: $(elt), model: binder};
     var type = ( $(elt).data("type") || "" ).toLowerCase();
+	var inst;
 
     switch ( type ){
       case "editable":
-        var inst = new EditableVar( bundle );
+        inst = new EditableVar( bundle );
         break;
       case "slidable":
-        var inst = new SlidableVar( bundle );
+        inst = new SlidableVar( bundle );
         break;
       case "draggable":
-        var inst = new DraggableVar( bundle );
+        inst = new DraggableVar( bundle );
         break;
       case "droppable":
-        var inst = new DroppableVar( bundle );
+        inst = new DroppableVar( bundle );
         break;
       case "selectable":
-        var inst = new SelectableVar( bundle );
+        inst = new SelectableVar( bundle );
         break;
       default:
-        var inst = new VarView( bundle );
+        inst = new VarView( bundle );
         break;
     }
     inst.render();
