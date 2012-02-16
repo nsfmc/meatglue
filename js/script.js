@@ -7,95 +7,83 @@ TODO use _.has when checking for properties to retain in scoped eval since conso
 Requires:
   jQuery 1.7+
   jQuery UI 1.8.16+
-    - ui.mouse
-    - ui.widget
-    - ui.draggable
-    - ui.droppable
   backbone .9+
   underscore 1.3.1+
 
 */
 
-jQuery(document).ready(function(){
+(function(){
 
   var trapper = {
 
-    vars: [],
-
     initialize: function(){
-      if(this.init){ this.init(); }
+      if( _.isFunction(this.init) ){ this.init(); }
     },
 
     reveal: function( section ){
-      $(".meatglue[data-section=" + section + "]:hidden").show()
+      var hiddenSection = $(this.problem).find("[data-section=" + section + "]:hidden")
+      hiddenSection.show("slow");
+    },
+
+    createVars: function( varNames, varType, where){
+      $(where).empty()
+      for (var i=0, len = varNames.length; i<len; i+=1){
+        var elt = jQuery("<span>")
+          .attr({"data-type": varType, "data-name":varNames[i]})
+          .appendTo(where)
+        bindMeat(elt, null, this);
+      }
+    },
+
+    inheritExerciseVars: function(){
+      // absorb the exercise's variables
+      var ev = KhanUtil.tmpl.getVARS();
+      for (k in ev){ this.set(k, ev[k]); }
     }
 
   }
 
-  // gather all the vars on the page
-  $("span[data-name]", $(".meatglue")).each( function(i, e){
-    $el = $(e);
-    var name = $el.data("name");
-    trapper.vars.push(name);
-  })
-
-  // with help from 
+  // with help from
   // http://stackoverflow.com/questions/543533/restricting-eval-to-a-narrow-scope
   // and also
   // http://www.yuiblog.com/blog/2006/04/11/with-statement-considered-harmful/
   // evaluates some text in the context of an empty scope var
-  var scopedEval = function( src, propWhitelist, callback){
+  // TODO document propWhitelist behavior, usage...
+  var scopedEval = function( src, callback){
     var scope = {};
-    for (prop in this){
-      if (prop !== "console" && prop !== "KhanUtil") {
-        scope[prop] = undefined;
-      }
-    }
-
-    // capture whitelisted properties in scope if defined
-    if(propWhitelist !== undefined){
-      for (var i=0; i<propWhitelist.length; i+=1){ scope[propWhitelist[i]] = true; }
-    }
 
     // eval in scope
     (new Function( "with(this) { "+ src +"};" )).call(scope);
 
-    if(propWhitelist !== undefined){
-      // cleanse any global vars made in the scope not in the whitelist
-      var callbackScope = {};
-      for(var i=0; i<propWhitelist.length; i+=1){
-        callbackScope[propWhitelist[i]] = scope[propWhitelist[i]];
-      }
-    }
-    else{
-      var callbackScope = $.extend({}, scope)
-    }
+    var callbackScope = $.extend({}, scope)
     // either return the restricted scope the code ran in or it fed through a callback
     return (callback !== undefined) ? callback(callbackScope) : callbackScope;
   }
 
-  // evaluate all the trapper scripts in a protected context
-  var defaultSrc = jQuery("script[type='text/meatglue']");
-  if (defaultSrc){
-    try {
-      var scopey = scopedEval(defaultSrc.text(), ["defaults", "update", "init"]);
-      if(scopey.defaults){ 
+  // set up the default environment on startup and return the created model
+  var initialize = function(problem){
+    // evaluate all the trapper scripts in a protected context
+    var defaultSrc = problem.find("script[type='text/meatglue']");
+
+    if (defaultSrc){
+        var scopey = scopedEval(defaultSrc.text);
         $.extend(trapper, scopey)
-      }
     }
-    catch(e) {
-      console.error("omg wtf problem with trapper script:", e);
-    }
+
+    // be able to access the problem area
+    $.extend( trapper, {problem: problem} );
+
+    var MeatBinder = Backbone.Model.extend(trapper);
+
+    return new MeatBinder;
+
   }
 
-  var TrapperKeeper = Backbone.Model.extend(trapper);
+  var VarView = Backbone.View.extend({
 
-  var binder = new TrapperKeeper;
-
-  var VarView = Backbone.View.extend({ 
-
+    // VarViews are rendered once and when the model is altered they are rendered again
     initialize: function(){
-      if(this.model.update){
+      if( _.isFunction(this.model.update) ){
         this.model.bind("change", this.render, this)
       }
     },
@@ -103,7 +91,7 @@ jQuery(document).ready(function(){
     render: function(){
       var name = this.$el.data("name");
       var value = this.model.get(name);
-      this.$el.text(value)
+      this.$el.text(value || "")
       return this;
     }
   });
@@ -139,7 +127,7 @@ jQuery(document).ready(function(){
         tosave[name] = val;
 
         this.model.set(tosave);
-        if(this.model.update){ this.model.update(); }
+        if( _.isFunction(this.model.update)){ this.model.update(); }
         this.render()
       }
     },
@@ -180,22 +168,91 @@ jQuery(document).ready(function(){
 
   var DroppableVar = VarView.extend({
     initialize: function(){
+      // TODO don't call update here in render, but here?
+      // return VarView.prototype.initialize.call(this)
     },
     render: function(){
       var name = this.$el.data("name");
       this.$el.text(name);
       var that = this;
+
       var dropAction = function(e,u){
-        // dropping a var onto the droppable causes the target to 
-        // inherit the value of the droppable 
+        // dropping a var onto the droppable causes the target to
+        // inherit the value of the droppable
         // TODO remove redundant elements (i.e. dropping a second elements should clear out the first)
         var droppedVar = $(u.draggable).data("name");
         var droppedVal = that.model.get(droppedVar);
         var targetName = $(this).data("name");
-        that.model.set(targetName, droppedVal);
+        that.model.set(targetName, droppedVar);
         if(that.model.update) { that.model.update(); }
       };
-      this.$el.droppable({drop: dropAction});
+
+      var outAction = function(e,u){
+        var targetName = $(this).data("name");
+        var droppableName = $(u.draggable).data("name");
+        // ignore other droppables leaving this target
+        if( droppableName === that.model.get(targetName) ){
+          that.model.set(targetName, undefined);
+          if(that.model.update) { that.model.update(); }
+        }
+      }
+
+      this.$el.droppable({drop: dropAction, out: outAction});
+    }
+  })
+
+  var SelectableVar = VarView.extend({
+    // SelectableVars allow you to create a series of checkbox controls and then let you pick n
+    // of those values. Use case:
+    // pick the values you'd need to solve this equation
+    // pick out all variables which are prime
+    // it will save, on each click, the value
+    events: {
+      "change": "render",
+    },
+    initialize: function(){
+      var validator = _.bind( this.doublecheck, this );
+      var name = this.$el.data("name")
+      var opts = this.$el.data("options").split(",")
+      var form = $("<form>")
+      var that = this;
+      _( opts ).each(function( elt ){
+        var sp = $("<span>")
+        var pfx = _.uniqueId("elt");
+        var label = $( "<label>", {'for': pfx} ).text( elt );
+        var button = $("<input />", {type:'checkbox', id:pfx, name:elt, value:elt});
+        button.on("click", validator)
+        sp.append(label).append(button);
+        form.append(sp);
+      })
+
+      // attach a change handler to the selectable var via the data-onchange
+      var changeHandler = this.$el.data("onchange")
+      if( changeHandler && _.isFunction( this.model[changeHandler] ) ){
+        // make sure the handler runs in the model context
+        var onchange = _.bind( this.model[changeHandler], this.model);
+        this.$el.on( "postchange", onchange);
+      }
+
+      this.$el.html( form )
+    },
+
+    doublecheck: function dc( evt ){
+      var selected = this.$el.find("form input:checkbox:checked");
+      if( this.$el.data("max") ){
+        return ( selected.length <= this.$el.data("max") )
+      }
+    },
+
+    render: function(){
+      var name = this.$el.data("name");
+      var opts = this.$el.data("options").split(",");
+      var namey = function( elt ){ return $(elt).val(); };
+      var checked = _.map(this.$el.find("form input:checkbox:checked"), namey);
+      this.model.set(name, checked)
+      this.$el.trigger( "postchange" ) // fire the
+      if( _.isFunction(this.model.update) ) { this.model.update(); }
+      return this;
     }
   })
 
@@ -243,33 +300,40 @@ jQuery(document).ready(function(){
 
   })
 
-  var bindMeat = function (elt, idx){
+  var bindMeat = function (elt, idx, binder){
     var bundle = {el: $(elt), model: binder};
-    var type = $(elt).data("type").toLowerCase();
+    var type = ( $(elt).data("type") || "" ).toLowerCase();
 
-    if (type === "editable"){
-      var inst = new EditableVar( bundle );
-    }
-    else if (type == "slidable"){
-      var inst = new SlidableVar( bundle );
-    }
-    else if (type == "draggable"){
-      var inst = new DraggableVar( bundle );
-    }
-    else if (type == "target"){
-      var inst = new DroppableVar( bundle );
-    }
-    
-    else{
-      var inst = new VarView( bundle );
+    switch ( type ){
+      case "editable":
+        var inst = new EditableVar( bundle );
+        break;
+      case "slidable":
+        var inst = new SlidableVar( bundle );
+        break;
+      case "draggable":
+        var inst = new DraggableVar( bundle );
+        break;
+      case "droppable":
+        var inst = new DroppableVar( bundle );
+        break;
+      case "selectable":
+        var inst = new SelectableVar( bundle );
+        break;
+      default:
+        var inst = new VarView( bundle );
+        break;
     }
     inst.render();
   }
 
 
-  jQuery.fn[ "meatglueLoad" ] = function(){
+  jQuery.fn[ "meatglueLoad" ] = function(prob, info){
     // map across all vars and assign them views
-    _( $( "span[data-name]", $( ".meatglue" ) ) ).each( bindMeat );
+    var binder = initialize(prob);
+    window.tk = binder; // TODO remove this later
+    var bindIt = function(e, i, m) { bindMeat(e, i, binder); }
+    _( $( "span[data-name]", $( ".meatglue" ) ) ).each( bindIt );
   }
 
-});
+})();
