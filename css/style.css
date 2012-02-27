@@ -88,6 +88,15 @@ td { vertical-align: top; }
   cursor:move;
   -webkit-border-radius: 4px;
   -webkit-box-shadow:-2px 2px 1px #aaa;
+  -moz-border-radius: 4px;
+  -moz-box-shadow:-2px 2px 1px #aaa;
+  -ms-border-radius: 4px;
+  -ms-box-shadow:-2px 2px 1px #aaa;
+  -o-border-radius: 4px;
+  -o-box-shadow:-2px 2px 1px #aaa;
+  border-radius: 4px;
+  box-shadow:-2px 2px 1px #aaa;
+  z-index:50;
 }
 [data-type=droppable]{
   color:transparent;
@@ -95,6 +104,10 @@ td { vertical-align: top; }
   background-color: rgb(235,245,255);
   display:inline-block;
   -webkit-box-shadow:0px 0px 1px #aaa;
+  -webkit-box-shadow:0px 0px 1px #aaa;
+  -webkit-box-shadow:0px 0px 1px #aaa;
+  -webkit-box-shadow:0px 0px 1px #aaa;
+  z-index:30;
 }
 .tangly {
   display:none;

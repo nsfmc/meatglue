@@ -83,7 +83,7 @@ Requires:
     var whitelist = _.union( ["defaults", "update", "init"], whitelisted );
 
     if (defaultSrc){
-      var scope = scopedEval(defaultSrc.text(), whitelist);
+      var scope = scopedEval(defaultSrc.html(), whitelist);
       $.extend(trapper, scope)
     }
 
