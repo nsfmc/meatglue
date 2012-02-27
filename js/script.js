@@ -105,9 +105,9 @@ Requires:
     },
 
     render: function(){
-      var name = this.$el.data("name");
+      var name = $(this.el).data("name");
       var value = this.model.get(name);
-      this.$el.text(value || "")
+      $(this.el).text(value || "")
       return this;
     }
   });
@@ -120,24 +120,24 @@ Requires:
     },
 
     toggleEdit: function(){
-      var name = this.$el.data("name");
+      var name = $(this.el).data("name");
       var val = this.model.get(name);
-      this.$el.html($("<input />").attr({'value':val}));
+      $(this.el).html($("<input />").attr({'value':val}));
 
       var that = this;
       this.$("input").focus().on("blur", function(){ that.saveState()})
     },
 
     saveState: function(evt){
-      var name = this.$el.data("name");
+      var name = $(this.el).data("name");
       var val = this.$("input").val();
 
       // is it a number?
       if(isNaN(Number(val))){
         // this may be handled otherwise
-        this.$el.addClass("invalid")
+        $(this.el).addClass("invalid")
       }else{
-        this.$el.removeClass("invalid")
+        $(this.el).removeClass("invalid")
         val = Number(val);
         var tosave = {};
         tosave[name] = val;
@@ -149,10 +149,10 @@ Requires:
     },
 
     render: function(){
-      var name = this.$el.data("name");
+      var name = $(this.el).data("name");
       var val = this.model.get(name);
       if (this.$("input:focus").length === 0){
-        this.$el.text(val);
+        $(this.el).text(val);
       }
       return this;
     }
@@ -161,10 +161,10 @@ Requires:
   var SlidableVar = VarView.extend({
 
     initialize: function(){
-      var name = this.$el.data("name");
+      var name = $(this.el).data("name");
       var val = this.model.get(name);
       VarView.prototype.initialize.call(this)
-      this.$el.slidable({'value': val, 'model': this.model});
+      $(this.el).slidable({'value': val, 'model': this.model});
     },
 
     render: function(){
@@ -176,9 +176,9 @@ Requires:
     initialize: function(){
     },
     render: function(){
-      var name = this.$el.data("name");
-      this.$el.text(name);
-      this.$el.draggable();
+      var name = $(this.el).data("name");
+      $(this.el).text(name);
+      $(this.el).draggable();
     }
   })
 
@@ -188,8 +188,8 @@ Requires:
       // return VarView.prototype.initialize.call(this)
     },
     render: function(){
-      var name = this.$el.data("name");
-      this.$el.text(name);
+      var name = $(this.el).data("name");
+      $(this.el).text(name);
       var that = this;
 
       var dropAction = function(e,u){
@@ -213,7 +213,7 @@ Requires:
         }
       }
 
-      this.$el.droppable({drop: dropAction, out: outAction});
+      $(this.el).droppable({drop: dropAction, out: outAction});
     }
   })
 
@@ -228,8 +228,8 @@ Requires:
     },
     initialize: function(){
       var validator = _.bind( this.doublecheck, this );
-      var name = this.$el.data("name")
-      var opts = this.$el.data("options").split(",")
+      var name = $(this.el).data("name")
+      var opts = $(this.el).data("options").split(",")
       var form = $("<form>")
       var that = this;
       _( opts ).each(function( elt ){
@@ -243,30 +243,30 @@ Requires:
       })
 
       // attach a change handler to the selectable var via the data-onchange
-      var changeHandler = this.$el.data("onchange")
+      var changeHandler = $(this.el).data("onchange")
       if( changeHandler && _.isFunction( this.model[changeHandler] ) ){
         // make sure the handler runs in the model context
         var onchange = _.bind( this.model[changeHandler], this.model);
-        this.$el.on( "postchange", onchange);
+        $(this.el).on( "postchange", onchange);
       }
 
-      this.$el.html( form )
+      $(this.el).html( form )
     },
 
     doublecheck: function dc( evt ){
-      var selected = this.$el.find("form input:checkbox:checked");
-      if( this.$el.data("max") ){
-        return ( selected.length <= this.$el.data("max") )
+      var selected = $(this.el).find("form input:checkbox:checked");
+      if( $(this.el).data("max") ){
+        return ( selected.length <= $(this.el).data("max") )
       }
     },
 
     render: function(){
-      var name = this.$el.data("name");
-      var opts = this.$el.data("options").split(",");
+      var name = $(this.el).data("name");
+      var opts = $(this.el).data("options").split(",");
       var namey = function( elt ){ return $(elt).val(); };
-      var checked = _.map(this.$el.find("form input:checkbox:checked"), namey);
+      var checked = _.map($(this.el).find("form input:checkbox:checked"), namey);
       this.model.set(name, checked)
-      this.$el.trigger( "postchange" ) // fire the
+      $(this.el).trigger( "postchange" ) // fire the
       if( _.isFunction(this.model.update) ) { this.model.update(); }
       return this;
     }
