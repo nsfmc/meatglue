@@ -11,8 +11,8 @@ It is compatible with IE >= 8 and modern versions of chrome, safari, opera and f
 Right now, meatglue is somewhat heavyweight in terms of dependencies:
 
 * jQuery ~= 1.7.1
-* backbone ~= 0.9.0
-* underscore ~= 1.3.1
+* backbone ~= 0.5.3
+* underscore ~= 1.2.1
 * jQueryUI => 1.8.16 (core, mouse, widget, draggable, droppable)
 * jQuery Mobile vmouse (this is optimistic, it's not currently hooked in, but making things touch friendly is an admirable goal)
 
