@@ -201,7 +201,7 @@ Requires:
         var droppedVar = $(u.draggable).data("name");
         var droppedVal = that.model.get(droppedVar);
         var targetName = $(this).data("name");
-        var attrs = {}; setty[targetName] = droppedVar;
+        var attrs = {}; attrs[targetName] = droppedVar;
         that.model.set(attrs);
         if (that.model.update) { that.model.update(); }
       };
