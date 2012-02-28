@@ -43,7 +43,7 @@ Requires:
     inheritExerciseVars: function(){
       // absorb the exercise's variables
       var ev = KhanUtil.tmpl.getVARS();
-      for (k in ev){ this.set(k, ev[k]); }
+      this.set( ev );
     }
 
   }
@@ -139,10 +139,9 @@ Requires:
       }else{
         $(this.el).removeClass("invalid")
         val = Number(val);
-        var tosave = {};
-        tosave[name] = val;
+        var attrs = {}; attrs[name] = val;
 
-        this.model.set(tosave);
+        this.model.set(attrs);
         if( _.isFunction(this.model.update)){ this.model.update(); }
         this.render()
       }
@@ -199,7 +198,8 @@ Requires:
         var droppedVar = $(u.draggable).data("name");
         var droppedVal = that.model.get(droppedVar);
         var targetName = $(this).data("name");
-        that.model.set(targetName, droppedVar);
+        var attrs = {}; setty[targetName] = droppedVar;
+        that.model.set(attrs);
         if(that.model.update) { that.model.update(); }
       };
 
@@ -208,7 +208,8 @@ Requires:
         var droppableName = $(u.draggable).data("name");
         // ignore other droppables leaving this target
         if( droppableName === that.model.get(targetName) ){
-          that.model.set(targetName, undefined);
+          var attrs = {}; attrs[targetName] = undefined;
+          that.model.set(attrs);
           if(that.model.update) { that.model.update(); }
         }
       }
@@ -265,8 +266,9 @@ Requires:
       var opts = $(this.el).data("options").split(",");
       var namey = function( elt ){ return $(elt).val(); };
       var checked = _.map($(this.el).find("form input:checkbox:checked"), namey);
-      this.model.set(name, checked)
-      $(this.el).trigger( "postchange" ) // fire the
+      var attrs = {}; attrs[name] = checked;
+      this.model.set(attrs)
+      $(this.el).trigger("postchange") // fire the custom handler for this control
       if( _.isFunction(this.model.update) ) { this.model.update(); }
       return this;
     }
@@ -296,7 +298,8 @@ Requires:
       }else{
         this.options.value = value;
         var name = this.element.data("name")
-        this.options.model.set(name, value)
+        var attrs = {}; attrs[name] = value;
+        this.options.model.set(attrs)
         if (this.options.model.update) { this.options.model.update() }
       }
     },
