@@ -171,38 +171,31 @@ Requires:
     },
 
     toggleEdit: function() {
-      var name = $(this.el).data("name");
-      var val = this.model.get(name);
-      $(this.el).html($("<input />").attr({"value": val}));
+      $(this.el).html($("<input />").attr({"value": this.val()}));
 
       var that = this;
       this.$("input").focus().on("blur", function() { that.saveState()});
     },
 
     saveState: function(evt) {
-      var name = $(this.el).data("name");
       var val = this.$("input").val();
 
       // is it a number?
+      // TODO this expects a number but maybe it doesn't need to?
       if (isNaN(Number(val))) {
         // this may be handled otherwise
         $(this.el).addClass("invalid");
       }else {
         $(this.el).removeClass("invalid");
-        val = Number(val);
-        var attrs = {}; attrs[name] = val;
-
-        this.model.set(attrs);
-        if (_.isFunction(this.model.update)) { this.model.update(); }
+        this.save( Number(val) )
+        this.update()
         this.render();
       }
     },
 
     render: function() {
-      var name = $(this.el).data("name");
-      var val = this.model.get(name);
       if (this.$("input:focus").length === 0) {
-        $(this.el).text(val);
+        $(this.el).text(this.val());
       }
       return this;
     }
