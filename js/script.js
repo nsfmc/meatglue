@@ -104,7 +104,7 @@ Requires:
     initialize: function() {
       this.varName = $(this.el).data("name");
 
-      if (_.isFunction(this.model.update)) {
+      if (_.isFunction(this.render)) {
         this.model.bind("change", this.render, this);
       }
     },
@@ -114,12 +114,20 @@ Requires:
       return this.model.get(this.varName);
     },
 
+    // abstract this.model.set's behavior and avoid the varname lookup
     save: function(value){
       var attrs = {};
       attrs[this.varName] = value;
       this.model.set(attrs);
+      // TODO could call this.update() here, but perhaps that should be opt-in?
     },
 
+    // call the user-defined update function
+    update: function(){
+      if (_.isFunction(this.model.update)) { this.model.update(); }
+    },
+
+    // place the var's value in the span
     render: function() {
       $(this.el).text(this.val() || "");
       return this;
@@ -132,6 +140,7 @@ Requires:
 
     saveState: function(evt){
       this.save( this.$("input").val() );
+      this.update();
     },
 
     initialize: function(){
