@@ -127,9 +127,8 @@ Requires:
   });
 
   var InputVar = VarView.extend({
-    events: {
-      "keyup": "saveState"
-    },
+    // the InputVar won't react to being changed programmatically outside of
+    // meatglue i.e. by $("sel input").val(something)
 
     saveState: function(evt){
       this.save( this.$("input").val() );
@@ -145,7 +144,9 @@ Requires:
     },
 
     render: function(){
-      // TODO: replace this to rerender the input when the value is changed externally
+      if (this.val() !== this.$("input").val()){
+        this.$("input").val( this.val() );
+      }
     }
   })
 
