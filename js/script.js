@@ -137,6 +137,9 @@ Requires:
 
     initialize: function(){
       VarView.prototype.initialize.call(this);
+      var kbevent = $.browser.msie ? "keyup paste cut drop" : "input";
+      this.model.bind(kbevent, this.saveState, this);
+
       var preferredType = $(this.el).data("format")
       $(this.el).html($("<input>", {type: preferredType, value: this.val()}))
     },
