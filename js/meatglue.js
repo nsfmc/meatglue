@@ -266,12 +266,14 @@ Requires:
 		events: {
 			"change": "render"
 		},
+
 		initialize: function() {
+			VarView.prototype.initialize.call(this)
 			var validator = _.bind(this.doublecheck, this);
-			var name = $(this.el).data("name");
 			var opts = $(this.el).data("options").split(",");
 			var form = $("<form>");
 			var that = this;
+
 			_(opts).each(function(elt) {
 				var sp = $("<span>");
 				var pfx = _.uniqueId("elt");
@@ -306,15 +308,14 @@ Requires:
 		},
 
 		render: function() {
-			var name = $(this.el).data("name");
+			var name = this.varName;
 			var opts = $(this.el).data("options").split(",");
 			var namey = function(elt) { return $(elt).val(); };
 			var checked = _.map($(this.el).find("form input:checkbox:checked"), namey);
-			var attrs = {}; attrs[name] = checked;
-			this.model.set(attrs);
+			this.save(checked)
 			// trigger the data-onchange handler for this control
 			$(this.el).trigger("postchange");
-			if (_.isFunction(this.model.update)) { this.model.update(); }
+			this.update();
 			return this;
 		}
 	});
