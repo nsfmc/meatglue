@@ -226,11 +226,10 @@ Requires:
   var DroppableVar = VarView.extend({
     initialize: function() {
       // TODO don't call update here in render, but here?
-      // return VarView.prototype.initialize.call(this)
+      return VarView.prototype.initialize.call(this)
     },
     render: function() {
-      var name = $(this.el).data("name");
-      $(this.el).text(name);
+      $(this.el).text(this.varName);
       var that = this;
 
       var dropAction = function(e, u) {
@@ -239,21 +238,19 @@ Requires:
         // TODO remove redundant elements (i.e. dropping a second elements should clear out the first)
         var droppedVar = $(u.draggable).data("name");
         var droppedVal = that.model.get(droppedVar);
-        var targetName = $(this).data("name");
-        var attrs = {}; attrs[targetName] = droppedVar;
-        that.model.set(attrs);
-        if (that.model.update) { that.model.update(); }
+        that.save(droppedVar); // save the draggable's varname as the target's value
+        that.update();
       };
 
       var outAction = function(e, u) {
-        var targetName = $(this).data("name");
+        var targetName = that.varName;
         var droppableName = $(u.draggable).data("name");
-        // ignore other droppables leaving this target
-        if (droppableName === that.model.get(targetName)) {
-          var attrs = {}; attrs[targetName] = undefined;
-          that.model.set(attrs);
-          if (that.model.update) { that.model.update(); }
-        }
+
+        // clear out a var if it leaves the target
+        if (droppableName === that.val()) {
+          that.save(undefined);
+          that.update();
+        } // else... ignore other droppables flying over this target
       }
 
       $(this.el).droppable({drop: dropAction, out: outAction});
