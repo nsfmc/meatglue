@@ -204,10 +204,8 @@ Requires:
   var SlidableVar = VarView.extend({
 
     initialize: function() {
-      var name = $(this.el).data("name");
-      var val = this.model.get(name);
       VarView.prototype.initialize.call(this);
-      $(this.el).slidable({"value": val, "model": this.model});
+      $(this.el).slidable({"value": this.val(), "view": this});
     },
 
     render: function() {
@@ -336,7 +334,7 @@ Requires:
 
     // defaults at zero, with a min/max of 100
     // make sure these are settable via data-attrs?
-    options: { value: 0, min: -100, max: 100, width: 10, model: {} },
+    options: { value: 0, min: -100, max: 100, width: 10, view: {} },
     _setOption: function(k, v) {
       $.Widget.prototype._setOption.apply(this, arguments);
     },
@@ -349,8 +347,8 @@ Requires:
         this.options.value = value;
         var name = this.element.data("name");
         var attrs = {}; attrs[name] = value;
-        this.options.model.set(attrs);
-        if (this.options.model.update) { this.options.model.update() }
+        this.options.view.save(value);
+        this.options.view.update();
       }
     },
 
