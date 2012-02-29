@@ -114,6 +114,12 @@ Requires:
       return this.model.get(this.varName);
     },
 
+    save: function(value){
+      var attrs = {};
+      attrs[this.varName] = value;
+      this.model.set(attrs);
+    },
+
     render: function() {
       $(this.el).text(this.val() || "");
       return this;
@@ -126,9 +132,7 @@ Requires:
     },
 
     saveState: function(evt){
-      var attrs = {};
-      attrs[this.varName] = $(this.el).find("input").val();
-      this.model.set(attrs);
+      this.save( this.$("input").val() );
     },
 
     initialize: function(){
