@@ -102,19 +102,45 @@ Requires:
 
     // VarViews are rendered once and when the model is altered they are rendered again
     initialize: function() {
+      this.varName = $(this.el).data("name");
+
       if (_.isFunction(this.model.update)) {
         this.model.bind("change", this.render, this);
       }
     },
 
+    // a shortcut for grabbing the value
+    val: function() {
+      return this.model.get(this.varName);
+    },
+
     render: function() {
-      var name = $(this.el).data("name");
-      var value = this.model.get(name);
-      $(this.el).text(value || "");
+      $(this.el).text(this.val() || "");
       return this;
     }
   });
 
+  var InputVar = VarView.extend({
+    events: {
+      "keyup": "saveState"
+    },
+
+    saveState: function(evt){
+      var attrs = {};
+      attrs[this.varName] = $(this.el).find("input").val();
+      this.model.set(attrs);
+    },
+
+    initialize: function(){
+      VarView.prototype.initialize.call(this);
+      var preferredType = $(this.el).data("format")
+      $(this.el).html($("<input>", {type: preferredType, value: this.val()}))
+    },
+
+    render: function(){
+      // TODO: replace this to rerender the input when the value is changed externally
+    }
+  })
 
   var EditableVar = VarView.extend({
     events: {
@@ -334,6 +360,9 @@ Requires:
     var inst;
 
     switch (type) {
+      case "input":
+        inst = new InputVar(bundle);
+        break;
       case "editable":
         inst = new EditableVar(bundle);
         break;

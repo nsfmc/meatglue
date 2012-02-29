@@ -40,6 +40,7 @@
       </div>
 
       <div class="meatglue" data-section="starting-off">
+        <p>this is a free input: <span data-name="freeinput" data-type="input"></span>. Its value is mirrored here:<span data-name="freeinput"></span>
         <p> In general, the conversion between Celsius and Fahrenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <span data-name="CELCIUS"></span>°C = <span data-name="FARENHEIT"></span>°F </p>
         <p>What temperature, in degrees celcius, would we need to get to <span data-name="FEXPECTED"></span>°F? Change this value here: <span data-name="CELCIUS" data-type="editable"></span>°C
       </div>
@@ -73,6 +74,7 @@
 	    <script type="text/meatglue">
 	        // populate some defaults
 	        defaults = {
+	          "freeinput" : "hee hee",
 	          "CELCIUS" : 23,
 	          "FEXPECTED" : 149,
 	          "blerg" : 12,
