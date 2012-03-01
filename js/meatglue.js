@@ -16,10 +16,12 @@ Requires:
 	var trapper = {
 
 		initialize: function() {
+			// run the user-supplied init function
 			if (_.isFunction(this.init)) { this.init(); }
 		},
 
 		reveal: function(section) {
+			// use to reveal a named div with data-section attribute
 			var hiddenSection = $(this.problem)
 				.find("[data-section=" + section + "]:hidden");
 			hiddenSection.show("slow");
@@ -32,7 +34,7 @@ Requires:
 		},
 
 		inheritExerciseVars: function() {
-			// absorb the exercise's variables
+			// for khan-exercises: absorb all the exercise's variables
 			var ev = KhanUtil.tmpl.getVARS();
 			this.set(ev);
 		}
