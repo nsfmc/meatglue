@@ -27,6 +27,16 @@ Requires:
 			hiddenSection.show("slow");
 		},
 
+		createVars: function(varNames, varType, where) {
+			$(where).empty();
+			for (var i = 0, len = varNames.length; i < len; i += 1) {
+				var elt = jQuery("<span>")
+					.attr({"data-type": varType, "data-name": varNames[i]})
+					.appendTo(where);
+				bindMeat(elt, null, this);
+			}
+		},
+
 		getget: function(varName) {
 			// for droppables, their value is the value of the thing dropped on them
 			// but maybe you want the value the dropped object represents
