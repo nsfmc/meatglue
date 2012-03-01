@@ -28,6 +28,9 @@ Requires:
 		},
 
 		createVars: function(varNames, varType, where) {
+			// createVals allows variables of certain types to be created during runtime. 
+			// I.e. you pick three vars and the three of them are added to the dom elt
+			// that where represents
 			$(where).empty();
 			for (var i = 0, len = varNames.length; i < len; i += 1) {
 				var elt = jQuery("<span>")
