@@ -6,8 +6,8 @@ TODO problems that use the same data but over multiple questions
 Requires:
 	jQuery 1.7+
 	jQuery UI 1.8.16+
-	backbone .9+
-	underscore 1.3.1+
+	backbone 0.5.3+
+	underscore 1.2.1+
 
 */
 
