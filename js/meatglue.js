@@ -311,6 +311,8 @@ Requires:
 	});
 
 
+	// this ka-slidable widget needs to get rewritten because it's basically only usable
+	// on the desktop. thankfully there's a lot of prebuilt wiring in $.mobile, so will do that
 	$.widget("ka.slidable", $.ui.mouse, {
 		_create: function() {
 			this._mouseInit();
