@@ -283,7 +283,7 @@ Requires:
 				var sp = $("<span>");
 				var pfx = _.uniqueId("elt");
 				var label = $("<label>", {"for": pfx}).text(elt);
-				var button = $("<input />", {
+				var button = $("<input>", {
 					type: "checkbox",
 					id: pfx,
 					name: elt,
@@ -306,17 +306,20 @@ Requires:
 		},
 
 		doublecheck: function dc(evt) {
-			var selected = $(this.el).find("form input:checkbox:checked");
+			// simple validation to prevent more checkboxes selected than 
+			// specified in the data-max attribute
 			if ($(this.el).data("max")) {
+				var selected = $(this.el).find("form input:checkbox:checked");
 				return (selected.length <= $(this.el).data("max"));
 			}
 		},
 
 		render: function() {
-			var name = this.varName;
 			var opts = $(this.el).data("options").split(",");
-			var namey = function(elt) { return $(elt).val(); };
-			var checked = _.map($(this.el).find("form input:checkbox:checked"), namey);
+			var inputVal = function(elt) { return $(elt).val(); };
+			var checked = _.($(this.el)
+				.find("form input:checkbox:checked"))
+				.map(inputVal);
 			this.save(checked)
 			// trigger the data-onchange handler for this control
 			$(this.el).trigger("postchange");
