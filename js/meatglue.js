@@ -317,9 +317,10 @@ Requires:
 		render: function() {
 			var opts = $(this.el).data("options").split(",");
 			var inputVal = function(elt) { return $(elt).val(); };
-			var checked = _.($(this.el)
-				.find("form input:checkbox:checked"))
+			var checked = _( $(this.el)
+					.find("form input:checkbox:checked"))
 				.map(inputVal);
+
 			this.save(checked)
 			// trigger the data-onchange handler for this control
 			$(this.el).trigger("postchange");
