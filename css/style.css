@@ -109,6 +109,9 @@ td { vertical-align: top; }
   -webkit-box-shadow:0px 0px 1px #aaa;
   z-index:30;
 }
+[data-section]{
+  display:none;
+}
 .tangly {
   display:none;
 }

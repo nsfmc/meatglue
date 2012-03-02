@@ -16,14 +16,14 @@
   <!-- CSS concatenated and minified via ant build script-->
   <link rel="stylesheet" href="css/style.css">
   <style type="text/css">
-    html {background-color: #933; }
-    h1{ font-family: 'Monoton', cursive; font-size:72px; color:#399; font-weight:normal; }
+/*    html {background-color: #933; }*/
+    h1{ font-family: 'History01', cursive; font-size:72px; color:#399; font-weight:normal; }
     #container{ width:800px; padding:20px; background-color: }
   </style>
   <!-- end CSS-->
 
   <script src="js/libs/modernizr-2.0.6.min.js"></script>
-  <link href='http://fonts.googleapis.com/css?family=Monoton' rel='stylesheet' type='text/css'>
+  <!-- <link href='http://fonts.googleapis.com/css?family=Monoton' rel='stylesheet' type='text/css'> -->
 </head>
 
 <body>
@@ -35,12 +35,41 @@
     <div id="main" role="main" class="">
       <div class="intro">
         <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
-
-        <p>Modeled off bret victor's tangle and tanglekit (whose reactive modules are firmly on the side of mochikit), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though. A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. 
+        <p>Modeled off Bret Victor's tangle and tanglekit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
+        <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going.
+        <p>This is like diet-backbone, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
 
-      <div class="meatglue" data-section="starting-off">
+      <div class="meatglue">
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { pinky: "Gee, Brain, what do you want to do tonight?" };
+          </script>
+        </div>
+        <p>The simplest meatglue variable is the VarView, you can specify it by giving a <code>span</code> element <code>data-name</code> attribute. The <code>span</code> will be populated with the corresponding variable set in defaults</p>
+        <div class="demo">
+          <p>Here is a variable: <span data-name="pinky"></span></p>
+        </div>
+
+        <div class="codesnippets"></div>
+      </div>
+
+      <div class="meatglue demo">
+
+        <script type="text/meatglue">
+          defaults = { freeinput: "type something here" };
+          update = function(){
+            var fi = this.get("freeinput");
+            if (fi !== defaults.freeinput) { this.reveal("milestone"); }
+          }
+        </script>
+
         <p>this is a free input: <span data-name="freeinput" data-type="input"></span>. Its value is mirrored here:<span data-name="freeinput"></span>
+        <p data-section="milestone">
+          congrats, you started playing with the free input!
+        </p>
+      </div>
+
         <p> In general, the conversion between Celsius and Fahrenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <span data-name="CELCIUS"></span>°C = <span data-name="FARENHEIT"></span>°F </p>
         <p>What temperature, in degrees celcius, would we need to get to <span data-name="FEXPECTED"></span>°F? Change this value here: <span data-name="CELCIUS" data-type="editable"></span>°C
       </div>
@@ -134,16 +163,47 @@
   <script defer src="js/plugins.js"></script>
 
   <!-- put your new backbone creation here -->
-  <script src="js/script.js"></script>
+  <script src="js/meatglue.js"></script>
 	<script type="text/javascript" charset="utf-8">
-		$.fn.meatglueLoad($("#main"))
-	</script>
+
+  var dedent = function( somecode ){
+    var pieced = somecode.split("\n");
+    var testre = /^(\s*)/gm;
+    console.log(testre, _(testre.exec(somecode)).map(function(e){return e.length}))
+
+    var spacey = /^(\s*)\S*/;
+    var defaultindent = _(pieced)
+      .map( function(line){ return spacey.exec(line); } )
+      .filter(function(match){ return match[0].length !== match[1].length; })
+      .map(function(match){ return match[1].length })
+    var minIndent = _(defaultindent).min()
+    cutitout = new RegExp("^\\s{"+minIndent+"}","gm")
+    somecode = $.trim(somecode).replace(cutitout, "")
+    return somecode;
+  }
+
+  $(document).ready(function(){
+    $(".meatglue").each(function(i,e){
+      var demoblock = $(e);
+
+      // grab code in each block, dedent it, and add to the pre
+      demoblock.find(".demo").each(function( idx, elt ){
+        var somecode = dedent( $(elt).html() )
+        var snippet = $("<pre>").text( somecode )
+        demoblock.find(".codesnippets").append(snippet)
+      })
+    })
+
+    $.fn.meatglueLoad( $(".meatglue") )
+
+  })
+  </script>
   <!-- end scripts-->
 
   <!--[if lt IE 7 ]>
     <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
     <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
   <![endif]-->
-  
+
 </body>
 </html>
