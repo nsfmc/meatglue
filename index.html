@@ -164,7 +164,6 @@
   var dedent = function( somecode ){
     var pieced = somecode.split("\n");
     var testre = /^(\s*)/gm;
-    console.log(testre, _(testre.exec(somecode)).map(function(e){return e.length}))
 
     var spacey = /^(\s*)\S*/;
     var defaultindent = _(pieced)
