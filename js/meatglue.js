@@ -236,29 +236,35 @@ Requires:
 			$(this.el).text(this.varName);
 			var that = this;
 
-			var dropAction = function(e, u) {
-				// dropping a var onto the droppable causes the target to
-				// inherit the value of the droppable
-				// TODO remove redundant elements (i.e. dropping a second elements should clear out the first)
-				var droppedVar = $(u.draggable).data("name");
-				var droppedVal = that.model.get(droppedVar);
-				that.save(droppedVar); // save the draggable's varname as the target's value
-				that.update();
-			};
-
-			var outAction = function(e, u) {
-				var targetName = that.varName;
-				var droppableName = $(u.draggable).data("name");
-
-				// clear out a var if it leaves the target
-				if (droppableName === that.val()) {
-					that.save(undefined);
-					that.update();
-				} // else... ignore other droppables flying over this target
+			var actions = {
+				drop: _.bind(this.dropAction, this),
+				out: _.bind(this.outAction, this)
 			}
 
-			$(this.el).droppable({drop: dropAction, out: outAction});
+			$(this.el).droppable( actions );
 		},
+
+		dropAction : function(e, u) {
+			// dropping a var onto the droppable causes the target to
+			// inherit the value of the droppable
+			// TODO remove redundant elements (i.e. dropping a second elements should clear out the first)
+			var droppedVar = $(u.draggable).data("name");
+			var droppedVal = this.model.get(droppedVar);
+			this.save(droppedVar); // save the draggable's varname as the target's value
+			this.update();
+		},
+
+		outAction : function(e, u) {
+			var targetName = this.varName;
+			var droppableName = $(u.draggable).data("name");
+
+			// clear out a var if it leaves the target
+			if (droppableName === this.val()) {
+				this.save(undefined);
+				this.update();
+			} // else... ignore other droppables flying over this target
+		},
+
 		render: function() {
 			// noop
 		}
