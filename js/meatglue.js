@@ -344,14 +344,8 @@ Requires:
 			$.Widget.prototype._setOption.apply(this, arguments);
 		},
 		setValue: function(value) {
-			if (value < this.options.min) {
-				this.options.value = this.options.min;
-			}else if (value > this.options.max) {
-				this.options.value = this.options.max;
-			}else {
+			if (value >= this.options.min && value <= this.options.max) {
 				this.options.value = value;
-				var name = this.element.data("name");
-				var attrs = {}; attrs[name] = value;
 				this.options.view.save(value);
 				this.options.view.update();
 			}
