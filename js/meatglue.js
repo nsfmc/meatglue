@@ -207,15 +207,11 @@ Requires:
 	});
 
 	var SlidableVar = VarView.extend({
-
 		initialize: function() {
 			VarView.prototype.initialize.call(this);
 			$(this.el).slidable({"value": this.val(), "view": this});
 		},
 
-		render: function() {
-			return VarView.prototype.render.call(this);
-		}
 	});
 
 	var DraggableVar = VarView.extend({
