@@ -221,10 +221,12 @@ Requires:
 	var DraggableVar = VarView.extend({
 		initialize: function() {
 			VarView.prototype.initialize.call(this);
-		},
-		render: function() {
+
 			$(this.el).text(this.varName);
 			$(this.el).draggable();
+		},
+		render: function() {
+			// noop
 		}
 	});
 
