@@ -230,10 +230,9 @@ Requires:
 
 	var DroppableVar = VarView.extend({
 		initialize: function() {
-			// TODO don't call update here in render, but here?
-			return VarView.prototype.initialize.call(this)
-		},
-		render: function() {
+			VarView.prototype.initialize.call(this)
+
+			// TODO move this out into a separate constructor
 			$(this.el).text(this.varName);
 			var that = this;
 
@@ -259,6 +258,9 @@ Requires:
 			}
 
 			$(this.el).droppable({drop: dropAction, out: outAction});
+		},
+		render: function() {
+			// noop
 		}
 	});
 
