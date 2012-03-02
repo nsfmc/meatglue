@@ -176,7 +176,7 @@ Requires:
 		},
 
 		toggleEdit: function() {
-			$(this.el).html($("<input />").attr({"value": this.val()}));
+			$(this.el).html($("<input>").attr({"value": this.val()}));
 
 			var that = this;
 			this.$("input").focus().on("blur", function() { that.saveState()});
