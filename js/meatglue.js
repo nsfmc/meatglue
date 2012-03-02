@@ -372,7 +372,7 @@ Requires:
 
 	});
 
-	var bindMeat = function(elt, idx, binder) {
+	var bindMeat = function(elt, binder) {
 		var bundle = {el: $(elt), model: binder};
 		var type = ($(elt).data("type") || "").toLowerCase();
 		var inst;
@@ -404,12 +404,16 @@ Requires:
 	}
 
 
-	jQuery.fn["meatglueLoad"] = function(prob, info) {
-		// map across all vars and assign them views
-		var binder = initialize(prob);
-		window.tk = binder; // TODO remove this later
-		var bindIt = function(e, i, m) { bindMeat(e, i, binder); }
-		_($("span[data-name]", $(".meatglue"))).each(bindIt);
+	// this is the default signature of all Khan-Exercises extensions where
+	// elts is typically the problem. It represents a jQuery wrapped element
+	jQuery.fn["meatglueLoad"] = function(elts, info) {
+		// map across all meatglue blocks and assign them their own views
+		$(elts).each(function(idx, elt){
+			prob = $(elt);
+			var binder = initialize(prob);
+			var bindIt = function(e) { bindMeat(e, binder); }
+			_(prob.find("span[data-name]")).each(bindIt);
+		})
 	}
 
 })();
