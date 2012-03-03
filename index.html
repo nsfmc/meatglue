@@ -15,9 +15,32 @@
 
   <!-- CSS concatenated and minified via ant build script-->
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/solarized_light.css">
+
   <style type="text/css">
 /*    html {background-color: #933; }*/
-    h1{ font-family: 'History01', cursive; font-size:72px; color:#399; font-weight:normal; }
+    header{ position:relative; height: 180px; }
+    h1{
+      font-family: 'History-One', cursive; 
+      font-size:72px; 
+      color:#399; 
+      font-weight:normal; 
+      position:absolute;
+      top:0; left:0;
+      letter-spacing:.25em;
+    }
+    h1.one { font-family: 'History-Seventeen'; }
+    h1.seventeen{ font-family: 'History-Seventeen'; }
+    h1.thirteen { font-family: 'History-Thirteen'; }
+    h1.eleven { font-family: 'History-Eleven'; }
+    h1.six { font-family: 'History-Six'; }
+
+    .bluegreen { color: #399; }
+    .orange { color: orange; }
+    .pink { color:pink; }
+    .green { color:green; }
+    .blue { color:blue; }
+
     #container{ width:800px; padding:20px; background-color: }
   </style>
   <!-- end CSS-->
@@ -30,7 +53,7 @@
 
   <div id="container">
     <header>
-      <h1>meatglue</h1>
+      <h1 data-overlay="feet,blerg">meatglue</h1>
     </header>
     <div id="main" role="main" class="">
       <div class="intro">
@@ -154,13 +177,17 @@
   <script src="js/libs/jquery-ui-1.8.16.custom.min.js"></script>
   <script src="js/libs/jquery.mobile.vmouse.js"></script>
 
+  <script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+
   <!-- scripts concatenated and minified via ant build script-->
   <script defer src="js/plugins.js"></script>
 
   <!-- put your new backbone creation here -->
   <script src="js/meatglue.js"></script>
-	<script type="text/javascript" charset="utf-8">
+	<script type="text/javascript" charset="utf-8">  
 
+  // dedent a block of text so that everything starts at least 0 spaces from the
+  // start of the line (but retain actual indenting inside the block)
   var dedent = function( somecode ){
     var pieced = somecode.split("\n");
     var testre = /^(\s*)/gm;
@@ -177,18 +204,40 @@
   }
 
   $(document).ready(function(){
+	// for each meatglue block, gather the documentation and append it to 
+	// the codesnippets div
     $(".meatglue").each(function(i,e){
       var demoblock = $(e);
 
       // grab code in each block, dedent it, and add to the pre
       demoblock.find(".demo").each(function( idx, elt ){
-        var somecode = dedent( $(elt).html() )
-        var snippet = $("<pre>").text( somecode )
+        var somecode = dedent( $(elt).html() );
+        var snippet = $("<pre>").append($("<code>").text( somecode ))
         demoblock.find(".codesnippets").append(snippet)
       })
     })
 
+    // apply syntax highlighting ( will probably switch this later, but i'm a sucker
+    // for solarized )
+    $(".codesnippets pre code").each(function(i,e){ hljs.highlightBlock(e, '  '); })
+
+    // actually eval meatglue scripts for each given meatglue block
     $.fn.meatglueLoad( $(".meatglue") )
+
+    // prettify the header
+    $("h1").each(function(i,e){
+      // var otherFonts = $(e).data("overlay").split(",");
+      var otherFonts =  _(
+		  _.shuffle(["one", "seventeen", "thirteen", "eleven", "six"]))
+		.first(3); 
+      var colours = _.first(
+        _(["bluegreen", "orange", "pink", "green", "blue"]).shuffle(),
+        3)
+      _(otherFonts).each(function(elt, idx){
+        var dup = $(e).clone().addClass( elt+" "+colours[idx] );
+        $("header").append(dup)
+      });
+    })
 
   })
   </script>
