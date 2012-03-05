@@ -19,6 +19,7 @@
 
   <style type="text/css">
 /*    html {background-color: #933; }*/
+    body { font-size:14px; line-height: 1.8em; }
     header{ position:relative; height: 180px; }
     h1{
       font-family: 'History-One', cursive; 
@@ -35,17 +36,19 @@
     h1.eleven { font-family: 'History-Eleven' ; }
     h1.six { font-family: 'History-Six' ; }
 
+    pre code{ font-family: "fedra mono", "fedramono", "menlo", "courier", monospace; font-size:12px; line-height:1.6em; }
+
     .bluegreen { color: #399; }
     .orange { color: orange; }
     .pink { color:pink; }
     .green { color:green; }
     .blue { color:blue; }
 
-    h2, h3 { font-family: "History-Four"; font-weight:normal; letter-spacing: .25em; }
+    h2, h3 { margin-top:2em; font-family: "History-Four"; font-weight:normal; letter-spacing: .25em; }
 
     #container{ width:800px; padding:20px; background-color: }
     .example{ width: 600px; margin-top:4em; border-bottom:1px solid #ccc; position:relative; }
-    .demo { position:absolute; right:-300px; top: 0; width:275px; }
+    .demo { position:absolute; right:-300px; width:275px; }
   </style>
   <!-- end CSS-->
 
@@ -64,11 +67,42 @@
         <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
         <p>Modeled off Bret Victor's tangle and TangleKit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
         <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going.
-        <p>This is like diet-backbone, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
+        <p>You can think of this like <em>diet-backbone</em>, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
 
       <h2>Getting Started</h2>
-      <p>The general pattern for using meatglue is to write a meatglue script and then include meatglue variables in your html. Wrap the whole section in some class and then call <code>$.fn.meatglue($('.someSelector'))</code>
+        <p>The general pattern for using meatglue is to write a meatglue script and then include meatglue variables in your html. Wrap the whole section in some class and then call <code>$.fn.meatglue($('.someSelector'))</code></p>
+        <div class="example">
+          <div class="demo">
+            <div class="meatglue">
+              <script type="text/meatglue">
+                defaults = {
+                  cost: 7.75,
+                  tip: 20,
+                }
+                
+                update = function(){
+                  var cost = this.get("cost");
+                  var tip = this.get("tip") / 100;
+                  var yourTotal = (cost + cost * tip).toFixed(2); // Add Tip and Round
+                  
+                  this.set({"yourTotal": yourTotal})
+                }
+                
+                init = function(){
+                  this.update();
+                }
+              </script>
+              
+              <p>You go out to lunch and get a buffet which costs 
+                $<span data-name="cost" data-type="editable"></span>.
+                You plan to leave a 
+                <span data-name="tip" data-type="slidable" data-min="15" data-max="25"></span>% tip.</p>
+              <p>Before you head out, you should leave: 
+                $<span data-name="yourTotal"></span></p>
+            </div>
+          </div>
+        </div>
 
       <h2>Variable Types</h2>
 
@@ -145,17 +179,48 @@
       </div>
 
       <div class="meatglue example">
+        <h3>Draggables</h3>
+        <p>Draggables are variables that represent a physical manifestation of some variable <em>name</em>, so if you have some variable called <em>foo</em>, you can have a draggable named <em>foo</em> which you can use for doing symbolic manipulations on <em>foo</em>.</p>
+        <p>By themselves, draggables are pretty useless.</p>
+        <div class="demo">
+          <p>This value can be dragged around: <span data-name="foo" data-type="draggable"></span></p>
+        </div>
+        
+      </div>
+      <div class="meatglue example">        
+        <h3>Droppables</h3>
+        <p>Droppables absorb the value of the draggable that lands on top of them. In order to query a droppable, meatglue offers another method, similar to <code>.get()</code>, called <code>.getget()</code> which returns the value of the dropped value.</p>
+        <div class="demo">
+          <p>Drag a value here: <span data-name="target" data-type="droppable"></span></p>
+        </div>
+      </div>
+      <div class="meatglue example">
         <h3>Draggables and Droppables</h3>
-        <p>
+        <p>Draggables and droppables are good for designing symbolic manipulation interactions</p>
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { foo: 23, bar: 17 }
+            
+            update = function(){
+              var targetValue = this.get("target");     // ["foo"|"bar"]
+              var droppedValue = this.getget("target"); // [23|17]
+              this.set({"dropped": droppedValue });
+            }
+          </script>
+          
+          <p>Here are two draggables:
+          <span data-name="foo" data-type="draggable"></span> 
+          <span data-name="bar" data-type="draggable"></span>
+          
+          <p>Drag a value here: <span data-name="target" data-type="droppable"></span></p>
+          <p>The target's value is: <span data-name="target"></span></p>
+          <p>The thing you dragged equals: <span data-name="dropped"></span>
+          <p>
+        </div>
       </div>
 
 
       <div class="meatglue">
-        <p> In general, the conversion between Celsius and Fahrenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <span data-name="CELCIUS"></span>°C = <span data-name="FARENHEIT"></span>°F </p>
-        <p>What temperature, in degrees celcius, would we need to get to <span data-name="FEXPECTED"></span>°F? Change this value here: <span data-name="CELCIUS" data-type="editable"></span>°C
-
-        <p>Great! <span data-name="CELCIUS"></span>°C is the right value.</p>
-        <p>let's see what happens here:<span data-name="blerg" data-type="slidable"></span> ==> <span data-name="foo"></span>
 
         <p>Fun with ratios! A : B :: C : D
         <p>Here are some variables to drag around: 
@@ -263,7 +328,7 @@
   $(document).ready(function(){
 	// for each meatglue block, gather the documentation and append it to 
 	// the codesnippets div
-    $(".meatglue").each(function(i,e){
+    $(".example").each(function(i,e){
       var demoblock = $(e);
 
       var codeholder = $("<div>",{class:"codesnippets"});
