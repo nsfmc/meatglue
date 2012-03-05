@@ -223,75 +223,8 @@
         </div>
       </div>
 
-
-      <div class="meatglue">
-
-        <p>Fun with ratios! A : B :: C : D
-        <p>Here are some variables to drag around: 
-          <span data-name="A" data-type="draggable"></span>
-          <span data-name="B" data-type="draggable"></span>
-          <span data-name="C" data-type="draggable"></span>
-          <span data-name="D" data-type="draggable"></span>
-        </p>
-        <p>Here are some targets:
-          <span data-name="target1" data-type="droppable"></span>:
-          <span data-name="target2" data-type="droppable"></span>::
-          <span data-name="target3" data-type="droppable"></span>:
-          <span data-name="target4" data-type="droppable"></span>
-
-      
-      <div data-section="ratio-success">
-        <p> Booyeah!
-      </div>
-
-	    <script type="text/meatglue">
-	        // populate some defaults
-	        defaults = {
-	          "freeinput" : "hee hee",
-	          "CELCIUS" : 23,
-	          "FEXPECTED" : 149,
-	          "blerg" : 12,
-	          "foo" : 14,
-	          "A":3,
-	          "B":4,
-	          "C":12,
-	          "D":16
-	        }
-
-	        update = function(){
-	          var celcius = this.get("CELCIUS");
-	          var fExpected = this.get("FEXPECTED");
-	          var blerg = this.get("blerg");
-
-	          this.set({"FARENHEIT": (celcius * 9 / 5 ) + 32 });
-	          if(this.get("FARENHEIT") == fExpected){
-	          }
-	          this.set({"foo": blerg * 3});
-	          var t1 = this.getget("target1");
-	          var t2 = this.getget("target2");
-	          var t3 = this.getget("target3");
-	          var t4 = this.getget("target4");
-	          var a = this.get("A");
-	          var b = this.get("B")
-	          if(t1/t2 === t3/t4 && t1/t2 === a/b){
-	            this.reveal("ratio-success")
-                $("[data-section='ratio-success']").html("<p>Ratio Success!</p>")
-	          }else{
-	          	$("[data-section='ratio-success']").html("<p>Make the ratio work!")
-	          }
-	        }
-
-	        init = function(){
-	          this.update();
-	          this.reveal("ratios");
-	        }
-
-	    </script>
-      </div>
-
     </div>
 
-    
 
   </div> <!--! end of #container -->
 
@@ -303,6 +236,7 @@
   <script src="js/libs/jquery-ui-1.8.16.custom.min.js"></script>
   <script src="js/libs/jquery.mobile.vmouse.js"></script>
 
+  <!-- whoa, maybe let's host this ourselves?! -->
   <script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
 
   <!-- scripts concatenated and minified via ant build script-->
