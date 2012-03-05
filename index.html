@@ -29,11 +29,11 @@
       top:0; left:0;
       letter-spacing:.25em;
     }
-    h1.one { font-family: 'History-Seventeen'; }
-    h1.seventeen{ font-family: 'History-Seventeen'; }
-    h1.thirteen { font-family: 'History-Thirteen'; }
-    h1.eleven { font-family: 'History-Eleven'; }
-    h1.six { font-family: 'History-Six'; }
+    h1.one { font-family: 'History-One' ; }
+    h1.seventeen{ font-family: 'History-Seventeen' ; }
+    h1.thirteen { font-family: 'History-Thirteen' ; }
+    h1.eleven { font-family: 'History-Eleven' ; }
+    h1.six { font-family: 'History-Six' ; }
 
     .bluegreen { color: #399; }
     .orange { color: orange; }
@@ -41,7 +41,11 @@
     .green { color:green; }
     .blue { color:blue; }
 
+    h2, h3 { font-family: "History-Four"; font-weight:normal; letter-spacing: .25em; }
+
     #container{ width:800px; padding:20px; background-color: }
+    .example{ width: 600px; margin-top:4em; border-bottom:1px solid #ccc; position:relative; }
+    .demo { position:absolute; right:-300px; top: 0; width:275px; }
   </style>
   <!-- end CSS-->
 
@@ -58,40 +62,93 @@
     <div id="main" role="main" class="">
       <div class="intro">
         <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
-        <p>Modeled off Bret Victor's tangle and tanglekit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
+        <p>Modeled off Bret Victor's tangle and TangleKit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
         <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going.
         <p>This is like diet-backbone, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
 
-      <div class="meatglue">
+      <h2>Getting Started</h2>
+      <p>The general pattern for using meatglue is to write a meatglue script and then include meatglue variables in your html. Wrap the whole section in some class and then call <code>$.fn.meatglue($('.someSelector'))</code>
+
+      <h2>Variable Types</h2>
+
+      <div class="meatglue example">
+        <h3>VarView</h3>
+        <p>The simplest meatglue variable is the VarView, you can specify it by giving a <code>span</code> element <code>data-name</code> attribute. The <code>span</code> will be populated with the corresponding variable set in defaults</p>
+
         <div class="demo">
           <script type="text/meatglue">
             defaults = { pinky: "Gee, Brain, what do you want to do tonight?" };
           </script>
-        </div>
-        <p>The simplest meatglue variable is the VarView, you can specify it by giving a <code>span</code> element <code>data-name</code> attribute. The <code>span</code> will be populated with the corresponding variable set in defaults</p>
-        <div class="demo">
+          
           <p>Here is a variable: <span data-name="pinky"></span></p>
         </div>
 
         <div class="codesnippets"></div>
       </div>
 
-      <div class="meatglue demo">
+      <div class="meatglue example">
+        <h3>FreeInput</h3>
+        <p>The FreeInput var allows you to store the contents of an <code>input</code> element into a meatglue variable. There is no sort of validation by default, although you can use the <code>update</code> method to force certain values.</p>
 
-        <script type="text/meatglue">
-          defaults = { freeinput: "type something here" };
-          update = function(){
-            var fi = this.get("freeinput");
-            if (fi !== defaults.freeinput) { this.reveal("milestone"); }
-          }
-        </script>
-
-        <p>this is a free input: <span data-name="freeinput" data-type="input"></span>. Its value is mirrored here:<span data-name="freeinput"></span>
-        <p data-section="milestone">
-          congrats, you started playing with the free input!
-        </p>
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { freeinput: "type something here" };
+          </script>
+          
+          <p>This is a free input: <span data-name="freeinput" data-type="input"></span>.</p>
+          <p>Its value is mirrored here: <span data-name="freeinput"></span> </p>
+        </div>
       </div>
+
+      <div class="meatglue example">
+        <h3>EditableVar</h3>
+        <p>The <code>EditableVar</code> allows you to have something similar to the InputVar, but instead, it is rendered as plain text. When you click on it, the value becomes editable. When you tab out or blur the input, it reverts to plain text again.</p>
+        <p>This element <em>does</em> do validation on its content, in particular it requires numeric input or it will mark itself as invalid until a number appears in the textbox
+
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { clicky: 23 };
+            update = function(){
+              var clicky = this.get("clicky");
+              this.set({"doubleclick": clicky * 2});
+            }
+          </script>
+
+          <p>This is an editable variable: <span data-name="clicky" data-type="editable"></span>.</p>
+          <p>When you change it, its value is doubled here: <span data-name="doubleclick"></span> </p>
+        </div>
+
+      </div>
+
+      <div class="meatglue example">
+        <h3>SlidableVar</h3>
+        <p>The <code>SlidableVar</code>'s interaction is lifted from TangleKit. It provides a variable whose value can be dragged, left or right, up to some min/max value you can set.</p>
+
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { 
+              slider: 23,
+              mini: 1
+             };
+            update = function(){
+              var slider = this.get("slider");
+              this.set({"miniburger": Math.pow(slider, 2)});
+            }
+          </script>
+          
+          <p>This is an slidable variable that defaults to min/max of [-100, 100]: <span data-name="slider" data-type="slidable"></span>. When you drag it, its value is squared here: <span data-name="miniburger"></span> </p>
+          
+          <p>This var has a restricted range of [1, 19]. <span data-name="mini" data-type="slidable" data-min="1" data-max="19"></span>. Nothing is currently listening to it.</p>
+        </div>
+
+      </div>
+
+      <div class="meatglue example">
+        <h3>Draggables and Droppables</h3>
+        <p>
+      </div>
+
 
       <div class="meatglue">
         <p> In general, the conversion between Celsius and Fahrenheit is governed by <i>F = C * 9/5 + 32</i>. So, for example: <span data-name="CELCIUS"></span>°C = <span data-name="FARENHEIT"></span>°F </p>
@@ -209,12 +266,15 @@
     $(".meatglue").each(function(i,e){
       var demoblock = $(e);
 
+      var codeholder = $("<div>",{class:"codesnippets"});
+
       // grab code in each block, dedent it, and add to the pre
       demoblock.find(".demo").each(function( idx, elt ){
         var somecode = dedent( $(elt).html() );
         var snippet = $("<pre>").append($("<code>").text( somecode ))
-        demoblock.find(".codesnippets").append(snippet)
+        codeholder.append(snippet)
       })
+      demoblock.append(codeholder);
     })
 
     // apply syntax highlighting ( will probably switch this later, but i'm a sucker
