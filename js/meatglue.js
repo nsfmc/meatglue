@@ -209,7 +209,12 @@ Requires:
 	var SlidableVar = VarView.extend({
 		initialize: function() {
 			VarView.prototype.initialize.call(this);
-			$(this.el).slidable({"value": this.val(), "view": this});
+			var opts = {"value": this.val(), "view": this};
+			var min = $(this.el).data("min")
+			if (min) { opts = _.extend( opts, {"min": min} ); }
+			var max = $(this.el).data("max")
+			if (max) { opts = _.extend( opts, {"max": max} ); }
+			$(this.el).slidable( opts );
 		},
 
 	});
