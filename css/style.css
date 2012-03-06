@@ -220,6 +220,40 @@ pre .tex .formula {
 }
 
 
+/*    html {background-color: #933; }*/
+body { font-size:13px; line-height: 1.8em; }
+header{ position:relative; height: 180px; }
+h1{
+  font-family: 'History 01 3', 'History-One', cursive; 
+  font-size:72px; 
+  color:#399; 
+  font-weight:normal; 
+  position:absolute;
+  top:0; left:0;
+  letter-spacing:.25em;
+}
+h1.one { font-family: 'History 01 3', 'History-One' ; }
+h1.seventeen{ font-family: 'History 17', 'History-Seventeen' ; }
+h1.thirteen { font-family: 'History 13 2', 'History-Thirteen' ; }
+h1.eleven { font-family: 'History 11', 'History-Eleven' ; }
+h1.six { font-family: 'History 06', 'History-Six' ; }
+
+pre code{ font-family: "Fedra Mono Medium 4", "fedra mono", "fedramono", "menlo", "courier", monospace; font-size:12px; line-height:1.6em; }
+
+.bluegreen { color: #399; }
+.orange { color: orange; }
+.pink { color:pink; }
+.green { color:green; }
+.blue { color:blue; }
+
+h2 { font-size: 2em; }
+h3 { font-size: 1em; }
+
+h2, h3 { margin-top:2em; font-family: "History-Four"; font-weight:normal; letter-spacing: .25em; }
+
+#container{ width:800px; padding:20px; background-color: }
+.example{ width: 600px; margin-top:4em; border-bottom:1px solid #ccc; position:relative; }
+.demo { position:absolute; right:-300px; width:275px; }
 
 
 
