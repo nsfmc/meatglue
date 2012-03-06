@@ -33,26 +33,38 @@ $(document).ready(function(){
     demoblock.append(codeholder);
   })
 
+  $(".nondemocode code").each(function( i, e){
+    $(e).html( dedent( $(e).html() ))
+  })
+
   // apply syntax highlighting ( will probably switch this later, but i'm a sucker
   // for solarized )
-  $(".codesnippets pre code").each(function(i,e){ hljs.highlightBlock(e, '  '); })
+  $(".codesnippets pre code, .nondemocode code").each(function(i,e){ hljs.highlightBlock(e, '  '); })
 
   // actually eval meatglue scripts for each given meatglue block
+  // $(".meatglue").meatglueLoad()
   $.fn.meatglueLoad( $(".meatglue") )
 
   // prettify the header
-  $("h1").each(function(i,e){
-    // var otherFonts = $(e).data("overlay").split(",");
-    var otherFonts =  _(
-	  _.shuffle(["one", "seventeen", "thirteen", "eleven", "six"]))
-	.first(3); 
-    var colours = _.first(
-      _(["bluegreen", "orange", "pink", "green", "blue"]).shuffle(),
-      3)
-    _(otherFonts).each(function(elt, idx){
-      var dup = $(e).clone().addClass( elt+" "+colours[idx] );
-      $("header").append(dup)
-    });
-  })
+  var historify = function(){
+    $("header h1:gt(0)").remove();
+    $("h1").each(function(i,e){
+      var otherFonts =  _(
+        _.shuffle(["one", "seventeen", "thirteen", "eleven", "six"]))
+        .first(3);
+
+      var colours = _.first(
+        _("orange, pink, yelloworange".split(",")).shuffle(),
+        3)
+
+      _(otherFonts).each(function(elt, idx){
+        var dup = $(e).clone().addClass( elt+" "+colours[idx] );
+        $("header").append(dup)
+      });
+    })
+  }
+  $("header").on("click", historify)
+  historify();
+
 
 })
