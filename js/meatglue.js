@@ -11,7 +11,7 @@ Requires:
 
 */
 
-(function() {
+(function( $ ) {
 
 	var trapper = {
 
@@ -425,4 +425,4 @@ Requires:
 		})
 	}
 
-})();
+})( jQuery );
