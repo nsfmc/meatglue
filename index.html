@@ -33,41 +33,70 @@
       <div class="intro">
         <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
         <p>Modeled off Bret Victor's tangle and TangleKit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
-        <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going.
+        <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going. I like tangle, too, but it
         <p>You can think of this like <em>diet-backbone</em>, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
 
       <h2>Getting Started</h2>
-        <p>The general pattern for using meatglue is to write a meatglue script and then include meatglue variables in your html. Wrap the whole section in some class and then call <code>$.fn.meatglue($('.someSelector'))</code></p>
-        <div class="example">
-          <div class="demo">
-            <div class="meatglue">
-              <script type="text/meatglue">
-                defaults = {
-                  cost: 7.75,
-                  tip: 20,
-                }
+        <p>The general pattern for using meatglue is 
+        <ol>
+          <li>Write a meatglue script with <code>defaults</code>, <code>update</code>, and <code>init</code> methods
+            <pre class="nondemocode"><code>
+              &lt;script type=&quot;text/meatglue&quot;&gt;
+                defaults = { a: 3 };
                 
                 update = function(){
-                  var cost = this.get("cost");
-                  var tip = this.get("tip") / 100;
-                  var yourTotal = (cost + cost * tip).toFixed(2); // Add Tip and Round
-                  
-                  this.set({"yourTotal": yourTotal})
+                  var a = this.get("a");
+                  var poly = "";
+                  if (a !== 0){
+                    var sign = (2*a < 0) ? "- " : "+ "
+                    poly += sign + Math.abs(2*a) + "x + " + (a*a)
+                  }
+                  this.set({ "polynomial": poly })
                 }
                 
-                init = function(){
-                  this.update();
-                }
-              </script>
-              
-              <p>You go out to lunch and get a buffet which costs 
-                $<span data-name="cost" data-type="editable"></span>.
-                You plan to leave a 
-                <span data-name="tip" data-type="slidable" data-min="15" data-max="25"></span>% tip.</p>
-              <p>Before you head out, you should leave: 
-                $<span data-name="yourTotal"></span></p>
-            </div>
+                init = function(){ this.update(); }
+              &lt;/script&gt;
+            </code></pre>
+          <li>Include meatglue variables in your html.
+            <pre class="nondemocode"><code>
+              &lt;p&gt;a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;;
+              &lt;p&gt;(x-a)&lt;sup&gt;2&lt;/sup&gt; =  
+                x&lt;sup&gt;2&lt;/sup&gt;
+                &lt;span data-name=&quot;polynomial&quot;&gt;&lt;/span&gt;
+            </code></pre>
+          <li>Wrap the whole section in some class and then call <br>
+          <pre class="nondemocode"><code>
+          &lt;script&gt;
+            $.fn.meatglueLoad( $('.someSelector') ) // or
+            $(".meatglue").meatglueLoad()
+          &lt;/script&gt;
+          </code></pre>
+
+        <p>The whole example, when you put it together, looks like so:
+        
+        <div class="meatglue">
+          <script type="text/meatglue">
+            defaults = { a: 3 };
+                
+            update = function(){
+              var a = this.get("a");
+              var poly = "";
+              if (a !== 0){
+                var sign = (2*a < 0) ? "- " : "+ "
+                poly += sign + Math.abs(2*a) + "x + " + (a*a)
+              }
+                  
+              this.set({ "polynomial": poly })
+            }
+                
+            init = function(){ this.update(); }
+          </script>
+          <div class="demo">
+          <p>Suppose a = <span data-name="a" data-type="slidable"></span></p>
+          <p>(x - a)<sup>2</sup> =  
+            x<sup>2</sup>
+            <span data-name="polynomial"></span></p>
           </div>
         </div>
 

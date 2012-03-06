@@ -71,7 +71,8 @@ Orginal Style from ethanschoonover.com/solarized (c) Jeremy Hull <sourdrums@gmai
 
 pre code {
   display: block; padding: 0.5em;
-  background: #fdf6e3; color: #657b83;
+  background: #fdf6e3; 
+  color: #657b83; /* base00 */
 }
 
 pre .comment,
@@ -80,8 +81,9 @@ pre .diff .header,
 pre .doctype,
 pre .lisp .string,
 pre .javadoc {
+  /*base1*/
   color: #93a1a1;
-  font-style: italic;
+/*  font-style: italic;*/
 }
 
 pre .keyword,
@@ -92,6 +94,7 @@ pre .method,
 pre .addition,
 pre .css .tag,
 pre .lisp .title {
+  /* green */
   color: #859900;
 }
 
@@ -103,12 +106,14 @@ pre .phpdoc,
 pre .tex .formula,
 pre .regexp,
 pre .hexcolor {
+  /*cyan*/
   color: #2aa198;
 }
 
 pre .title,
 pre .localvars,
 pre .function .title,
+pre .javascript .keyword,
 pre .chunk,
 pre .decorator,
 pre .builtin,
@@ -117,13 +122,15 @@ pre .lisp .title,
 pre .identifier,
 pre .title .keymethods,
 pre .id {
+  /*blue*/
   color: #268bd2;
 }
 
 pre .tag .title,
 pre .rules .property,
 pre .django .tag .keyword {
-  font-weight: bold;
+  /*base01*/
+/*  color: #586e75;*/
 }
 
 pre .attribute,
@@ -131,10 +138,11 @@ pre .variable,
 pre .instancevar,
 pre .lisp .body,
 pre .smalltalk .number,
-pre .constant,
+/*pre .constant,*/
 pre .class .title,
 pre .parent,
 pre .haskell .label {
+  /* yellow */
   color: #b58900;
 }
 
@@ -168,12 +176,13 @@ pre .tex .formula {
 .invalid input, .invalid textarea { background-color: #f0dddd; }
 
 [data-type=editable], [data-type=slidable]{
-  border-bottom: 1px dotted #369;
+  border-bottom: 1px dotted #fbb03b;
+  padding: 0 3px;
 }
 [data-type=editable] input{
   width:75px;
   border-width:0;
-  border-bottom:1px solid #369;
+  border-bottom:1px solid #fbb03b;
 }
 .sliding, [data-type=slidable]{
   cursor: move; /* for ie8 */
@@ -212,20 +221,17 @@ pre .tex .formula {
 [data-section]{
   display:none;
 }
-.tangly {
-  display:none;
-}
-.debug .tangly {
-  display:block;
-}
 
 
-/*    html {background-color: #933; }*/
-body { font-size:13px; line-height: 1.8em; }
-header{ position:relative; height: 180px; }
+
+html {background-color: #4a4849; }
+body { font-size:13px; line-height: 1.8em; color: #e6d6c4; }
+header{ position:relative; height: 220px; }
+#container { margin-left: 3em; }
 h1{
   font-family: 'History 01 3', 'History-One', cursive; 
   font-size:72px; 
+  line-height:2em;
   color:#399; 
   font-weight:normal; 
   position:absolute;
@@ -241,20 +247,43 @@ h1.six { font-family: 'History 06', 'History-Six' ; }
 pre code{ font-family: "Fedra Mono Medium 4", "fedra mono", "fedramono", "menlo", "courier", monospace; font-size:12px; line-height:1.6em; }
 
 .bluegreen { color: #399; }
-.orange { color: orange; }
+.orange { color: #f15a24; }
+.yelloworange { color: #fbb03b; }
 .pink { color:pink; }
 .green { color:green; }
 .blue { color:blue; }
 
-h2 { font-size: 2em; }
+h2 { font-size: 2em; line-height:1.5em; }
 h3 { font-size: 1em; }
 
-h2, h3 { margin-top:2em; font-family: "History-Four"; font-weight:normal; letter-spacing: .25em; }
+h2, h3 { 
+  margin-top:2em; font-family: "History 06", "History-Four";
+  font-weight:normal; letter-spacing: .25em;
+  color: #fbb03b;
+  border-bottom: 1px solid #fbb03b;
+}
 
-#container{ width:800px; padding:20px; background-color: }
-.example{ width: 600px; margin-top:4em; border-bottom:1px solid #ccc; position:relative; }
-.demo { position:absolute; right:-300px; width:275px; }
-
+p {margin-bottom: 2em; }
+#container{ width:600px; padding:20px; background-color: }
+.example, ol pre{ width: 600px; } 
+.example { margin-top:4em; position:relative; }
+.demo {
+  width:275px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -o-border-radius: 7px;
+  border-radius: 7px;
+  padding:1em;
+  border:3px solid #e0e0e0;
+  background-color:#754c24;
+  color:;
+}
+.demo p { margin-bottom:1em; }
+.example .demo {
+  position:absolute;
+  right:-350px; top:1.5em;
+}
 
 
 
