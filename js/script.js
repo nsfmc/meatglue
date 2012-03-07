@@ -43,7 +43,7 @@ $(document).ready(function(){
 
   // actually eval meatglue scripts for each given meatglue block
   // $(".meatglue").meatglueLoad()
-  $.fn.meatglueLoad( $(".meatglue") )
+  $(".meatglue").meatglue();
 
   // prettify the header
   var historify = function(){

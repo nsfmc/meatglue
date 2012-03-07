@@ -423,7 +423,7 @@
 
 	// this is the default signature of all Khan-Exercises extensions where
 	// elts is typically the problem. It represents a jQuery wrapped element
-	jQuery.fn["meatglueLoad"] = function(elts, info) {
+	jQuery.fn["meatglue"] = function(elts, info) {
 		// map across all meatglue blocks and assign them their own views
 		var scripts = this.length > 0 ? this : jQuery(elts)
 		return scripts.each(function(idx, elt){
@@ -433,5 +433,6 @@
 			_(prob.find("span[data-name]")).each(bindIt);
 		})
 	}
+	jQuery.fn["meatglueLoad"] = jQuery.fn["meatglue"];
 
 })( jQuery );
