@@ -1,17 +1,21 @@
-/* Author: Marcos Ojeda <marcos@khanacademy.org>
+// Meatglue.js 0.1.0
+//
+// (c) 2012 Marcos Ojeda, <marcos@khanacademy.org>
+// Meatglue may be freely distributed under the MIT license.
+// Portions of Meatglue are inspired by Bret Victor's Tangle.js
+// For more information, see http://nsfmc.github.com/meatglue/
+//
+// TODO show-guess support from khan-exercises needs to be added in
+// TODO problems that use the same data but over multiple questions
+//
+// Requires:
+//	jQuery 1.7+
+//	jQuery UI 1.8.16+
+//	Backbone 0.5.3+
+//	Underscore 1.2.1+
 
-TODO show-guess support from khan-exercises needs to be added in
-TODO problems that use the same data but over multiple questions
 
-Requires:
-	jQuery 1.7+
-	jQuery UI 1.8.16+
-	backbone 0.5.3+
-	underscore 1.2.1+
-
-*/
-
-(function() {
+(function( $ ) {
 
 	var trapper = {
 
@@ -134,8 +138,8 @@ Requires:
 
 		// place the var's value in the span
 		render: function() {
-			$(this.el).text(this.val() || "");
-			return this;
+			var val = _.isNumber( this.val() ) ? this.val().toString() : this.val();
+			$(this.el).text( val || "" );
 		}
 	});
 
@@ -217,6 +221,10 @@ Requires:
 			$(this.el).slidable( opts );
 		},
 
+		render: function(){
+			var val = _.isNumber( this.val() ) ? this.val().toString() : this.val();
+			$(this.el).text( val );
+		}
 	});
 
 	var DraggableVar = VarView.extend({
@@ -415,14 +423,16 @@ Requires:
 
 	// this is the default signature of all Khan-Exercises extensions where
 	// elts is typically the problem. It represents a jQuery wrapped element
-	jQuery.fn["meatglueLoad"] = function(elts, info) {
+	jQuery.fn["meatglue"] = function(elts, info) {
 		// map across all meatglue blocks and assign them their own views
-		$(elts).each(function(idx, elt){
+		var scripts = this.length > 0 ? this : jQuery(elts)
+		return scripts.each(function(idx, elt){
 			prob = $(elt);
 			var binder = initialize(prob);
 			var bindIt = function(e) { bindMeat(e, binder); }
 			_(prob.find("span[data-name]")).each(bindIt);
 		})
 	}
+	jQuery.fn["meatglueLoad"] = jQuery.fn["meatglue"];
 
-})();
+})( jQuery );
