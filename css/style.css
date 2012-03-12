@@ -77,7 +77,8 @@ td { vertical-align: top; }
   border-bottom:1px solid #369;
 }
 .sliding, [data-type=slidable]{
-  cursor: EW-resize;
+  cursor: move; /* for ie8 */
+  cursor: EW-resize; /* for everyone else */
 }
 [data-type=draggable], [data-type=droppable]{
   background-color:rgb(207, 232, 236);
@@ -108,6 +109,9 @@ td { vertical-align: top; }
   -webkit-box-shadow:0px 0px 1px #aaa;
   -webkit-box-shadow:0px 0px 1px #aaa;
   z-index:30;
+}
+[data-section]{
+  display:none;
 }
 .tangly {
   display:none;
