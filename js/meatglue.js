@@ -7,6 +7,7 @@
 //
 // TODO show-guess support from khan-exercises needs to be added in
 // TODO problems that use the same data but over multiple questions
+// TODO remove hard dependency on jQuery UI (should use vmouse)
 //
 // Requires:
 //	jQuery 1.7+
