@@ -1,4 +1,4 @@
-// Meatglue.js 0.1.0
+// Meatglue.js 0.2.1
 //
 // (c) 2012 Marcos Ojeda, <marcos@khanacademy.org>
 // Meatglue may be freely distributed under the MIT license.
@@ -7,6 +7,7 @@
 //
 // TODO show-guess support from khan-exercises needs to be added in
 // TODO problems that use the same data but over multiple questions
+// TODO remove hard dependency on jQuery UI (should use vmouse)
 //
 // Requires:
 //	jQuery 1.7+
@@ -79,7 +80,7 @@
 		// eval in scope
 		(new Function("with(this) { " + src + "};")).call(scope);
 
-		var callbackScope = $.extend({}, scope);
+		var callbackScope = scope;
 		// either return the restricted scope the code ran in or it fed through a callback
 		return (callback !== undefined) ? callback(callbackScope) : callbackScope;
 	}
@@ -170,6 +171,20 @@
 			if (this.val() !== this.$("input").val()){
 				this.$("input").val( this.val() );
 			}
+		}
+	})
+
+	var BinaryVar = VarView.extend({
+		// a BinaryVar tests the truthiness of its variable. If true, it renders
+		// the first child span, if false, it renders the second child span.
+
+		initialize: function(){
+			VarView.prototype.initialize.call(this);
+		},
+
+		render: function(){
+			var visIndex = this.val() ? 0 : 1;
+			this.$("span").hide(0).eq(visIndex).show(0);
 		}
 	})
 
@@ -397,6 +412,9 @@
 		switch (type) {
 			case "input":
 				inst = new InputVar(bundle);
+				break;
+			case "binary":
+				inst = new BinaryVar(bundle);
 				break;
 			case "editable":
 				inst = new EditableVar(bundle);
