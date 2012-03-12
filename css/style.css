@@ -194,33 +194,29 @@ pre .tex .formula {
   cursor: EW-resize; /* for everyone else */
 }
 [data-type=draggable], [data-type=droppable]{
-  background-color:rgb(207, 232, 236);
-  color:rgb(93, 146, 163);
+  background-color:rgb(230, 150, 49);
+  border:2px solid white;
+  color: white;
   padding: 3px 6px;
   font-style:normal;
   font-weight:bold;
   cursor:move;
   -webkit-border-radius: 4px;
-  -webkit-box-shadow:-2px 2px 1px #aaa;
   -moz-border-radius: 4px;
-  -moz-box-shadow:-2px 2px 1px #aaa;
   -ms-border-radius: 4px;
-  -ms-box-shadow:-2px 2px 1px #aaa;
   -o-border-radius: 4px;
-  -o-box-shadow:-2px 2px 1px #aaa;
   border-radius: 4px;
-  box-shadow:-2px 2px 1px #aaa;
   z-index:50;
 }
 [data-type=droppable]{
   color:transparent;
-  border:2px dotted rgb(93, 146, 163);
-  background-color: rgb(235,245,255);
+  background-color: #4a4849;
+  border-style:;
   display:inline-block;
-  -webkit-box-shadow:0px 0px 1px #aaa;
-  -webkit-box-shadow:0px 0px 1px #aaa;
-  -webkit-box-shadow:0px 0px 1px #aaa;
-  -webkit-box-shadow:0px 0px 1px #aaa;
+  -webkit-box-shadow:0px 0px 2px #ddd;
+  -webkit-box-shadow:0px 0px 2px #ddd;
+  -webkit-box-shadow:0px 0px 2px #ddd;
+  -webkit-box-shadow:0px 0px 2px #ddd;
   z-index:30;
   cursor:default;
 }
