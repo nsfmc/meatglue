@@ -16,48 +16,9 @@
   <!-- CSS concatenated and minified via ant build script-->
   <link rel="stylesheet" href="http://wf.typotheque.com/WF-009837-001595" type="text/css" />
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/solarized_light.css">
 
-  <style type="text/css">
-/*    html {background-color: #933; }*/
-    body { font-size:13px; line-height: 1.8em; }
-    header{ position:relative; height: 180px; }
-    h1{
-      font-family: 'History 01 3', 'History-One', cursive; 
-      font-size:72px; 
-      color:#399; 
-      font-weight:normal; 
-      position:absolute;
-      top:0; left:0;
-      letter-spacing:.25em;
-    }
-    h1.one { font-family: 'History 01 3', 'History-One' ; }
-    h1.seventeen{ font-family: 'History 17', 'History-Seventeen' ; }
-    h1.thirteen { font-family: 'History 13 2', 'History-Thirteen' ; }
-    h1.eleven { font-family: 'History 11', 'History-Eleven' ; }
-    h1.six { font-family: 'History 06', 'History-Six' ; }
-
-    pre code{ font-family: "Fedra Mono Medium 4", "fedra mono", "fedramono", "menlo", "courier", monospace; font-size:12px; line-height:1.6em; }
-
-    .bluegreen { color: #399; }
-    .orange { color: orange; }
-    .pink { color:pink; }
-    .green { color:green; }
-    .blue { color:blue; }
-
-    h2 { font-size: 2em; }
-    h3 { font-size: 1em; }
-
-    h2, h3 { margin-top:2em; font-family: "History-Four"; font-weight:normal; letter-spacing: .25em; }
-
-    #container{ width:800px; padding:20px; background-color: }
-    .example{ width: 600px; margin-top:4em; border-bottom:1px solid #ccc; position:relative; }
-    .demo { position:absolute; right:-300px; width:275px; }
-  </style>
   <!-- end CSS-->
 
-  <script src="js/libs/modernizr-2.0.6.min.js"></script>
-  <!-- <link href='http://fonts.googleapis.com/css?family=Monoton' rel='stylesheet' type='text/css'> -->
 </head>
 
 <body>
@@ -69,46 +30,76 @@
     <div id="main" role="main" class="">
       <div class="intro">
         <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
-        <p>Modeled off Bret Victor's tangle and TangleKit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
-        <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going.
+        <p>Modeled off Bret Victor's <a href="http://worrydream.com/Tangle/">Tangle</a> and TangleKit (which, btw, hat tip), Meatglue is designed to be used in a similar fashion, but on sites where Backbone and jQuery UI are already present. Meatglue is not tangle, though, so while you get some of the same behavior and convenience, it's only conceptually similar and is still very rough around the edges.
+        <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going. I like tangle, too, but it's not well suited to the exercises i was trying to build.
         <p>You can think of this like <em>diet-backbone</em>, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
 
       <h2>Getting Started</h2>
-        <p>The general pattern for using meatglue is to write a meatglue script and then include meatglue variables in your html. Wrap the whole section in some class and then call <code>$.fn.meatglue($('.someSelector'))</code></p>
-        <div class="example">
-          <div class="demo">
-            <div class="meatglue">
-              <script type="text/meatglue">
-                defaults = {
-                  cost: 7.75,
-                  tip: 20,
-                }
+        <p>The general pattern for using meatglue is 
+        <ol>
+          <li>Include <a href="#variables">meatglue variables</a> in your html.
+            <pre class="nondemocode"><code>
+              &lt;p&gt;a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;;
+              &lt;p&gt;(x-a)&lt;sup&gt;2&lt;/sup&gt; =  
+                x&lt;sup&gt;2&lt;/sup&gt;
+                &lt;span data-name=&quot;polynomial&quot;&gt;&lt;/span&gt;
+            </code></pre>
+
+          <li>Write a meatglue script with <code>defaults</code>, <code>update</code>, and <code>init</code> methods
+            <pre class="nondemocode"><code>
+              &lt;script type=&quot;text/meatglue&quot;&gt;
+                defaults = { a: 3 };
                 
                 update = function(){
-                  var cost = this.get("cost");
-                  var tip = this.get("tip") / 100;
-                  var yourTotal = (cost + cost * tip).toFixed(2); // Add Tip and Round
-                  
-                  this.set({"yourTotal": yourTotal})
+                  var a = this.get("a"); 
+                  var poly = "";
+                  if (a !== 0){
+                    var sign = (2*a < 0) ? "- " : "+ "
+                    poly += sign + Math.abs(2*a) + "x + " + (a*a)
+                  }
+                  this.set({ "polynomial": poly })
                 }
                 
-                init = function(){
-                  this.update();
-                }
-              </script>
-              
-              <p>You go out to lunch and get a buffet which costs 
-                $<span data-name="cost" data-type="editable"></span>.
-                You plan to leave a 
-                <span data-name="tip" data-type="slidable" data-min="15" data-max="25"></span>% tip.</p>
-              <p>Before you head out, you should leave: 
-                $<span data-name="yourTotal"></span></p>
-            </div>
+                init = function(){ this.update(); }
+              &lt;/script&gt;
+            </code></pre>
+
+          <li>Wrap the whole section in some class and then call <br>
+          <pre class="nondemocode"><code>
+          &lt;script&gt;
+            $(".meatglue").meatglue()
+          &lt;/script&gt;
+          </code></pre>
+
+        <p>The whole example, when you put it together, looks like so:
+        
+        <div class="meatglue">
+          <script type="text/meatglue">
+            defaults = { a: 3 };
+                
+            update = function(){
+              var a = this.get("a");
+              var poly = "";
+              if (a !== 0){
+                var sign = (2*a < 0) ? "- " : "+ "
+                poly += sign + Math.abs(2*a) + "x + " + (a*a)
+              }
+                  
+              this.set({ "polynomial": poly })
+            }
+                
+            init = function(){ this.update(); }
+          </script>
+          <div class="demo">
+          <p>Suppose a = <span data-name="a" data-type="slidable"></span></p>
+          <p>(x - a)<sup>2</sup> =  
+            x<sup>2</sup>
+            <span data-name="polynomial"></span></p>
           </div>
         </div>
 
-      <h2>Variable Types</h2>
+      <h2 id="variables">Variable Types</h2>
 
       <div class="meatglue example">
         <h3>VarView</h3>
@@ -185,6 +176,7 @@
           
       </div>
 
+
       <div class="meatglue example">
         <h3>SlidableVar</h3>
         <p>The <code>SlidableVar</code>'s interaction is lifted from TangleKit. It provides a variable whose value can be dragged, left or right, up to some min/max value you can set.</p>
@@ -257,13 +249,12 @@
 
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
   <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.js"><\/script>')</script>
+
   <script src="js/libs/underscore.js"></script>
   <script src="js/libs/backbone.js"></script>
   <script src="js/libs/jquery-ui-1.8.16.custom.min.js"></script>
   <script src="js/libs/jquery.mobile.vmouse.js"></script>
-
-  <!-- whoa, maybe let's host this ourselves?! -->
-  <script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+  <script src="js/libs/highlight.pack.js"></script>
 
   <!-- scripts concatenated and minified via ant build script-->
   <script defer src="js/plugins.js"></script>
