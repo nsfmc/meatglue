@@ -160,6 +160,32 @@
       </div>
 
       <div class="meatglue example">
+          <h3>BinaryVar</h3>
+          <p>A Binary variable toggles between two states depending on the value of the var being referenced.</p>
+          <p>If the variable is true, the first span is displayed, if false, the second span is displayed.</p>
+
+          <div class="demo">
+            <script type="text/meatglue">
+              defaults = { somenum: 23, odd: true }
+              update = function(){
+                var isodd = this.get("somenum") % 2 === 1;
+                this.set({ "odd": isodd });
+              }
+            </script>
+            
+            <p><span data-name="somenum" data-type="editable"></span>
+              is an
+              <span data-name="odd" data-type="binary">
+                <span>odd</span> <!-- rendered if `odd` is true -->
+                <span>even</span> <!-- rendered if `odd` is false -->
+              </span>
+              number.
+            </p>
+          </div>
+          
+      </div>
+
+      <div class="meatglue example">
         <h3>SlidableVar</h3>
         <p>The <code>SlidableVar</code>'s interaction is lifted from TangleKit. It provides a variable whose value can be dragged, left or right, up to some min/max value you can set.</p>
 
