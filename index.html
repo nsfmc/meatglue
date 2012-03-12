@@ -19,8 +19,6 @@
 
   <!-- end CSS-->
 
-  <script src="js/libs/modernizr-2.0.6.min.js"></script>
-  <!-- <link href='http://fonts.googleapis.com/css?family=Monoton' rel='stylesheet' type='text/css'> -->
 </head>
 
 <body>
@@ -32,7 +30,7 @@
     <div id="main" role="main" class="">
       <div class="intro">
         <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
-        <p>Modeled off Bret Victor's tangle and TangleKit (who, btw, hat tip), meatglue is designed to be used in a similar fashion, but on sites where backbone and jquery ui are already present. Meatglue is not tangle, though.
+        <p>Modeled off Bret Victor's <a href="http://worrydream.com/Tangle/">Tangle</a> and TangleKit (which, btw, hat tip), Meatglue is designed to be used in a similar fashion, but on sites where Backbone and jQuery UI are already present. Meatglue is not tangle, though, so while you get some of the same behavior and convenience, it's only conceptually similar and is still very rough around the edges.
         <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going. I like tangle, too, but it's not well suited to the exercises i was trying to build.
         <p>You can think of this like <em>diet-backbone</em>, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
@@ -40,6 +38,14 @@
       <h2>Getting Started</h2>
         <p>The general pattern for using meatglue is 
         <ol>
+          <li>Include <a href="#variables">meatglue variables</a> in your html.
+            <pre class="nondemocode"><code>
+              &lt;p&gt;a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;;
+              &lt;p&gt;(x-a)&lt;sup&gt;2&lt;/sup&gt; =  
+                x&lt;sup&gt;2&lt;/sup&gt;
+                &lt;span data-name=&quot;polynomial&quot;&gt;&lt;/span&gt;
+            </code></pre>
+
           <li>Write a meatglue script with <code>defaults</code>, <code>update</code>, and <code>init</code> methods
             <pre class="nondemocode"><code>
               &lt;script type=&quot;text/meatglue&quot;&gt;
@@ -58,13 +64,7 @@
                 init = function(){ this.update(); }
               &lt;/script&gt;
             </code></pre>
-          <li>Include meatglue variables in your html.
-            <pre class="nondemocode"><code>
-              &lt;p&gt;a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;;
-              &lt;p&gt;(x-a)&lt;sup&gt;2&lt;/sup&gt; =  
-                x&lt;sup&gt;2&lt;/sup&gt;
-                &lt;span data-name=&quot;polynomial&quot;&gt;&lt;/span&gt;
-            </code></pre>
+
           <li>Wrap the whole section in some class and then call <br>
           <pre class="nondemocode"><code>
           &lt;script&gt;
@@ -99,7 +99,7 @@
           </div>
         </div>
 
-      <h2>Variable Types</h2>
+      <h2 id="variables">Variable Types</h2>
 
       <div class="meatglue example">
         <h3>VarView</h3>

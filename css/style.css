@@ -179,11 +179,16 @@ pre .tex .formula {
   border-bottom: 1px dotted #fbb03b;
   padding: 0 3px;
 }
-[data-type=editable] input{
-  width:75px;
-  border-width:0;
-  border-bottom:1px solid #fbb03b;
+[data-type=editable] input, [data-type=input] input{
+
+  width:125px;
+  border:2px solid white;
+  -webkit-border-radius:4px;
+  background-color:#4a4849;
+  padding:2px;
+  color:white; font-weight:bold;
 }
+
 .sliding, [data-type=slidable]{
   cursor: move; /* for ie8 */
   cursor: EW-resize; /* for everyone else */
@@ -217,6 +222,7 @@ pre .tex .formula {
   -webkit-box-shadow:0px 0px 1px #aaa;
   -webkit-box-shadow:0px 0px 1px #aaa;
   z-index:30;
+  cursor:default;
 }
 [data-section]{
   display:none;
@@ -257,7 +263,7 @@ h2 { font-size: 2em; line-height:1.5em; }
 h3 { font-size: 1em; }
 
 h2, h3 { 
-  margin-top:2em; font-family: "History 06", "History-Four";
+  margin-top:2em; font-family: "History 06", "History-Six", "History-Four";
   font-weight:normal; letter-spacing: .25em;
   color: #fbb03b;
   border-bottom: 1px solid #fbb03b;
@@ -285,7 +291,9 @@ p {margin-bottom: 2em; }
   right:-350px; top:1.5em;
 }
 
-
+a, a:link, a:visited, a:focus, a:hover, a:active{
+  color: #fbb03b;
+}
 
 
 
