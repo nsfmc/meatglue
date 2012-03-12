@@ -1,4 +1,4 @@
-// Meatglue.js 0.2.0
+// Meatglue.js 0.2.1
 //
 // (c) 2012 Marcos Ojeda, <marcos@khanacademy.org>
 // Meatglue may be freely distributed under the MIT license.
@@ -79,7 +79,7 @@
 		// eval in scope
 		(new Function("with(this) { " + src + "};")).call(scope);
 
-		var callbackScope = $.extend({}, scope);
+		var callbackScope = scope;
 		// either return the restricted scope the code ran in or it fed through a callback
 		return (callback !== undefined) ? callback(callbackScope) : callbackScope;
 	}
