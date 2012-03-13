@@ -40,10 +40,13 @@
         <ol>
           <li>Include <a href="#variables">meatglue variables</a> in your html.
             <pre class="nondemocode"><code>
-              &lt;p&gt;a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;;
-              &lt;p&gt;(x-a)&lt;sup&gt;2&lt;/sup&gt; =  
-                x&lt;sup&gt;2&lt;/sup&gt;
+            &lt;p&gt;Suppose a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+            &lt;p&gt;(x - a)&lt;sup&gt;2&lt;/sup&gt; =  
+              x&lt;sup&gt;2&lt;/sup&gt;
+              &lt;span data-name=&quot;a&quot; data-type=&quot;binary&quot;&gt;
                 &lt;span data-name=&quot;polynomial&quot;&gt;&lt;/span&gt;
+              &lt;/span&gt;
+            &lt;/p&gt;
             </code></pre>
 
           <li>Write a <a href="#scripting">meatglue script</a> with <code>defaults</code>, <code>update</code>, and <code>init</code> methods
@@ -52,12 +55,11 @@
                 defaults = { a: 3 };
                 
                 update = function(){
-                  var a = this.get("a"); 
+                  var a = this.get("a");
                   var poly = "";
-                  if (a !== 0){
-                    var sign = (2*a < 0) ? "- " : "+ "
-                    poly += sign + Math.abs(2*a) + "x + " + (a*a)
-                  }
+                  var sign = (2*a < 0) ? "- " : "+ "
+                  poly += sign + Math.abs(2*a) + "x + " + (a*a)
+                  
                   this.set({ "polynomial": poly })
                 }
                 
@@ -79,15 +81,13 @@
         <div class="meatglue">
           <script type="text/meatglue">
             defaults = { a: 3 };
-                
+            
             update = function(){
               var a = this.get("a");
               var poly = "";
-              if (a !== 0){
-                var sign = (2*a < 0) ? "- " : "+ "
-                poly += sign + Math.abs(2*a) + "x + " + (a*a)
-              }
-                  
+              var sign = (2*a < 0) ? "- " : "+ "
+              poly += sign + Math.abs(2*a) + "x + " + (a*a)
+              
               this.set({ "polynomial": poly })
             }
                 
@@ -97,7 +97,10 @@
           <p>Suppose a = <span data-name="a" data-type="slidable"></span></p>
           <p>(x - a)<sup>2</sup> =  
             x<sup>2</sup>
-            <span data-name="polynomial"></span></p>
+            <span data-name="a" data-type="binary">
+              <span data-name="polynomial"></span>
+            </span>
+          </p>
           </div>
         </div>
 
