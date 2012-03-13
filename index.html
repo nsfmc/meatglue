@@ -172,29 +172,29 @@
       </div>
 
       <div class="meatglue example">
-          <h3 id="var-binary">binary</h3>
-          <p>A <code>binary</code> variable toggles between two states depending on the value of the var being referenced.</p>
-          <p>If the variable is true, the first span is displayed, if false, the second span is displayed. If there is only one child span and the variable evaluates to false, nothing is shown.</p>
-          <p>Even better, you can have other meatglue variables as the first/second span. (see the demo at the top of the page for an example)
+        <h3 id="var-binary">binary</h3>
+        <p>A <code>binary</code> variable toggles between two states depending on the value of the var being referenced.</p>
+        <p>If the variable is true, the first span is displayed, if false, the second span is displayed. If there is only one child span and the variable evaluates to false, nothing is shown.</p>
+        <p>Even better, you can have other meatglue variables as the first/second span. (see the demo at the top of the page for an example)
 
-          <div class="demo">
-            <script type="text/meatglue">
-              defaults = { somenum: 23, odd: true }
-              update = function(){
-                var isodd = this.get("somenum") % 2 === 1;
-                this.set({ "odd": isodd });
-              }
-            </script>
-            
-            <p><span data-name="somenum" data-type="editable"></span>
-              is an
-              <span data-name="odd" data-type="binary">
-                <span>odd</span> <!-- rendered if `odd` is true -->
-                <span>even</span> <!-- rendered if `odd` is false -->
-              </span>
-              number.
-            </p>
-          </div>
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { somenum: 23, odd: true }
+            update = function(){
+              var isodd = this.get("somenum") % 2 === 1;
+              this.set({ "odd": isodd });
+            }
+          </script>
+          
+          <p><span data-name="somenum" data-type="editable"></span>
+            is an
+            <span data-name="odd" data-type="binary">
+              <span>odd</span> <!-- rendered if `odd` is true -->
+              <span>even</span> <!-- rendered if `odd` is false -->
+            </span>
+            number.
+          </p>
+        </div>
           
       </div>
 
