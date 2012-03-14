@@ -255,15 +255,15 @@ pre code{ font-family: "Fedra Mono Medium 4", "fedra mono", "fedramono", "menlo"
 .green { color:green; }
 .blue { color:blue; }
 
-h2 { font-size: 2em; line-height:1.5em; }
-h3 { font-size: 1em; }
-
 h2, h3 { 
   margin-top:2em; font-family: "History 06", "History-Six", "History-Four";
   font-weight:normal; letter-spacing: .25em;
   color: #fbb03b;
   border-bottom: 1px solid #fbb03b;
 }
+
+h2 { font-size: 2em; line-height:1.5em; margin-top:6em; }
+h3 { font-size: 1em; }
 
 p {margin-bottom: 2em; }
 #container{ width:600px; padding:20px; background-color: }
