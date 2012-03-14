@@ -7,7 +7,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title></title>
+  <title>meatglue: reactive bindings on the cheap</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -25,39 +25,41 @@
 
   <div id="container">
     <header>
-      <h1 data-overlay="feet,blerg">meatglue</h1>
+      <h1>meatglue</h1>
     </header>
     <div id="main" role="main" class="">
-      <div class="intro">
-        <p>Meatglue is a jQuery+Backbone+jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
+      <div class="intro" id="intro">
+        <p>Meatglue is a jQuery + Backbone + jQueryUI library which simplifies the process of creating reactive bindings on your webpages.
         <p>Modeled off Bret Victor's <a href="http://worrydream.com/Tangle/">Tangle</a> and TangleKit (which, btw, hat tip), Meatglue is designed to be used in a similar fashion, but on sites where Backbone and jQuery UI are already present. Meatglue is not tangle, though, so while you get some of the same behavior and convenience, it's only conceptually similar and is still very rough around the edges.
         <p>A better way of thinking about it is a collection of related views which can be rapidly dropped into a page. The emphasis here is rapid development. I like backbone, but it's a bit time consuming to set up a json object to get a backbone test going. I like tangle, too, but it's not well suited to the exercises i was trying to build.
         <p>You can think of this like <em>diet-backbone</em>, you get some pre-built views and some pre-made bindings. You can specify validation functions (or not) and you can also set up mappings/bindings from variables onto other variables.
       </div>
 
-      <h2>Getting Started</h2>
+      <h2 id="getting-started">Getting Started</h2>
         <p>The general pattern for using meatglue is 
         <ol>
           <li>Include <a href="#variables">meatglue variables</a> in your html.
             <pre class="nondemocode"><code>
-              &lt;p&gt;a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;;
-              &lt;p&gt;(x-a)&lt;sup&gt;2&lt;/sup&gt; =  
-                x&lt;sup&gt;2&lt;/sup&gt;
+            &lt;p&gt;Suppose a = &lt;span data-name=&quot;a&quot; data-type=&quot;slidable&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+            &lt;p&gt;(x - a)&lt;sup&gt;2&lt;/sup&gt; =  
+              x&lt;sup&gt;2&lt;/sup&gt;
+              &lt;span data-name=&quot;a&quot; data-type=&quot;binary&quot;&gt;
                 &lt;span data-name=&quot;polynomial&quot;&gt;&lt;/span&gt;
+              &lt;/span&gt;
+            &lt;/p&gt;
             </code></pre>
 
-          <li>Write a meatglue script with <code>defaults</code>, <code>update</code>, and <code>init</code> methods
+          <li>Write a <a href="#scripting">meatglue script</a> with <code>defaults</code>, <code>update</code>, and <code>init</code> methods
             <pre class="nondemocode"><code>
               &lt;script type=&quot;text/meatglue&quot;&gt;
                 defaults = { a: 3 };
                 
                 update = function(){
-                  var a = this.get("a"); 
+                  var a = this.get("a");
                   var poly = "";
-                  if (a !== 0){
-                    var sign = (2*a < 0) ? "- " : "+ "
-                    poly += sign + Math.abs(2*a) + "x + " + (a*a)
-                  }
+                  var sign = (2*a < 0) ? "- " : "+ "
+                  poly += sign + Math.abs(2*a) + "x + " + (a*a)
+                  
                   this.set({ "polynomial": poly })
                 }
                 
@@ -65,27 +67,27 @@
               &lt;/script&gt;
             </code></pre>
 
-          <li>Wrap the whole section in some class and then call <br>
+          <li>Wrap <em>both</em> the script and the markup in some class and then call <br>
           <pre class="nondemocode"><code>
           &lt;script&gt;
             $(".meatglue").meatglue()
           &lt;/script&gt;
           </code></pre>
 
+        </ol>
+
         <p>The whole example, when you put it together, looks like so:
         
         <div class="meatglue">
           <script type="text/meatglue">
             defaults = { a: 3 };
-                
+            
             update = function(){
               var a = this.get("a");
               var poly = "";
-              if (a !== 0){
-                var sign = (2*a < 0) ? "- " : "+ "
-                poly += sign + Math.abs(2*a) + "x + " + (a*a)
-              }
-                  
+              var sign = (2*a < 0) ? "- " : "+ "
+              poly += sign + Math.abs(2*a) + "x + " + (a*a)
+              
               this.set({ "polynomial": poly })
             }
                 
@@ -95,15 +97,20 @@
           <p>Suppose a = <span data-name="a" data-type="slidable"></span></p>
           <p>(x - a)<sup>2</sup> =  
             x<sup>2</sup>
-            <span data-name="polynomial"></span></p>
+            <span data-name="a" data-type="binary">
+              <span data-name="polynomial"></span>
+            </span>
+          </p>
           </div>
         </div>
 
       <h2 id="variables">Variable Types</h2>
+      <p>If you're looking to implement a document with reactive data-bindings, you'll include these variables into your html.</p>
 
       <div class="meatglue example">
-        <h3>VarView</h3>
-        <p>The simplest meatglue variable is the VarView, you can specify it by giving a <code>span</code> element <code>data-name</code> attribute. The <code>span</code> will be populated with the corresponding variable set in defaults</p>
+        <h3 id="var-default">default</h3>
+        <p>The simplest meatglue variable is the VarView, you can specify it by giving a <code>span</code> element <code>data-name</code> attribute. The <code>span</code> will be populated with the corresponding variable set in defaults.</p>
+        <p>If you don't set a <code>data-type</code> for a <code>span</code>, it will default to simply displaying the value of the variable</p>
 
         <div class="demo">
           <script type="text/meatglue">
@@ -117,8 +124,8 @@
       </div>
 
       <div class="meatglue example">
-        <h3>FreeInput</h3>
-        <p>The FreeInput var allows you to store the contents of an <code>input</code> element into a meatglue variable. There is no sort of validation by default, although you can use the <code>update</code> method to force certain values.</p>
+        <h3 id="var-input">input</h3>
+        <p>The <code>input</code> var allows you to store the contents of an <code>input</code> element into a meatglue variable. There is no sort of validation by default, although you can use the <code>update</code> method to force certain values.</p>
 
         <div class="demo">
           <script type="text/meatglue">
@@ -131,8 +138,8 @@
       </div>
 
       <div class="meatglue example">
-        <h3>EditableVar</h3>
-        <p>The <code>EditableVar</code> allows you to have something similar to the InputVar, but instead, it is rendered as plain text. When you click on it, the value becomes editable. When you tab out or blur the input, it reverts to plain text again.</p>
+        <h3 id="var-editable">editable</h3>
+        <p>The <code>editable</code> variable allows you to have something similar to the <code>input</code>, but instead, it is rendered as plain text. When you click on it, the value becomes editable. When you tab out or blur the input, it reverts to plain text again.</p>
         <p>This element <em>does</em> do validation on its content, in particular it requires numeric input or it will mark itself as invalid until a number appears in the textbox
 
         <div class="demo">
@@ -151,35 +158,36 @@
       </div>
 
       <div class="meatglue example">
-          <h3>BinaryVar</h3>
-          <p>A Binary variable toggles between two states depending on the value of the var being referenced.</p>
-          <p>If the variable is true, the first span is displayed, if false, the second span is displayed.</p>
+        <h3 id="var-binary">binary</h3>
+        <p>A <code>binary</code> variable toggles between two states depending on the value of the var being referenced.</p>
+        <p>If the variable is true, the first span is displayed, if false, the second span is displayed. If there is only one child span and the variable evaluates to false, nothing is shown.</p>
+        <p>Even better, you can have other meatglue variables as the first/second span. (see the demo at the top of the page for an example)
 
-          <div class="demo">
-            <script type="text/meatglue">
-              defaults = { somenum: 23, odd: true }
-              update = function(){
-                var isodd = this.get("somenum") % 2 === 1;
-                this.set({ "odd": isodd });
-              }
-            </script>
-            
-            <p><span data-name="somenum" data-type="editable"></span>
-              is an
-              <span data-name="odd" data-type="binary">
-                <span>odd</span> <!-- rendered if `odd` is true -->
-                <span>even</span> <!-- rendered if `odd` is false -->
-              </span>
-              number.
-            </p>
-          </div>
+        <div class="demo">
+          <script type="text/meatglue">
+            defaults = { somenum: 23, odd: true }
+            update = function(){
+              var isodd = this.get("somenum") % 2 === 1;
+              this.set({ "odd": isodd });
+            }
+          </script>
+          
+          <p><span data-name="somenum" data-type="editable"></span>
+            is an
+            <span data-name="odd" data-type="binary">
+              <span>odd</span> <!-- rendered if `odd` is true -->
+              <span>even</span> <!-- rendered if `odd` is false -->
+            </span>
+            number.
+          </p>
+        </div>
           
       </div>
 
 
       <div class="meatglue example">
-        <h3>SlidableVar</h3>
-        <p>The <code>SlidableVar</code>'s interaction is lifted from TangleKit. It provides a variable whose value can be dragged, left or right, up to some min/max value you can set.</p>
+        <h3 id="var-slidable">slidable</h3>
+        <p>The <code>slidable</code>'s interaction is lifted from TangleKit. It provides a variable whose value can be dragged, left or right, up to some min/max value you can set.</p>
 
         <div class="demo">
           <script type="text/meatglue">
@@ -201,8 +209,8 @@
       </div>
 
       <div class="meatglue example">
-        <h3>Draggables</h3>
-        <p>Draggables are variables that represent a physical manifestation of some variable <em>name</em>, so if you have some variable called <em>foo</em>, you can have a draggable named <em>foo</em> which you can use for doing symbolic manipulations on <em>foo</em>.</p>
+        <h3 id="var-draggable">draggable</h3>
+        <p>Draggables are variables that represent a physical/touchable manifestation of some variable <em>name</em>, so if you have some variable called <em>foo</em>, you can have a draggable named <em>foo</em> which you can use for doing symbolic manipulations on <em>foo</em>.</p>
         <p>By themselves, draggables are pretty useless.</p>
         <div class="demo">
           <p>This value can be dragged around: <span data-name="foo" data-type="draggable"></span></p>
@@ -210,14 +218,15 @@
         
       </div>
       <div class="meatglue example">        
-        <h3>Droppables</h3>
-        <p>Droppables absorb the value of the draggable that lands on top of them. In order to query a droppable, meatglue offers another method, similar to <code>.get()</code>, called <code>.getget()</code> which returns the value of the dropped value.</p>
+        <h3 id="var-droppable">Droppables</h3>
+        <p>Droppables absorb the value of the draggable that lands on top of them. In order to query a droppable, meatglue offers another method, similar to <code><a href="#get">.get()</a></code>, called <code><a href="#getget">.getget()</a></code> which returns the value of the dropped draggable.</p>
         <div class="demo">
           <p>Drag a value here: <span data-name="target" data-type="droppable"></span></p>
         </div>
       </div>
+
       <div class="meatglue example">
-        <h3>Draggables and Droppables</h3>
+        <h3 id="var-dragdrop">Draggables and Droppables</h3>
         <p>Draggables and droppables are good for designing symbolic manipulation interactions</p>
         <div class="demo">
           <script type="text/meatglue">
@@ -243,6 +252,187 @@
 
     </div>
 
+    <h2 id="scripting">Scripting with Meatglue</h2>
+    <p>Meatglue takes the core priciples from Tangle.js and merges them with some of the more basic ideas from Backbone.js. However, if you can write javascript, you can use Meatglue. The benefit is that you spend less time building up interactive widgets and you can be more clear about what your logic actually is.</p>
+    <p>If this sounds really backbone-ish, it's because Meatglue fundamentally adopts the same mindset: 
+    <ul>
+      <li>you have a model which stores all your variables
+      <li>a function listens for all model changes and updates any variables necessary
+      <li>all variables on the page are re-rendered in response
+    </ul>
+    
+    <h3>defaults (object)</h3>
+    <p>You can specify default values for all variables in the <code>defaults</code> object. 
+    <pre class="nondemocode"><code>
+      &lt;script type=&quot;text/meatglue&quot;&gt;
+        defaults = { x: 23, foo: "hmmmm...", ollie: "reeder", isGood: true }
+      &lt;/script&gt;
+    </code></pre>
+    
+    <h3>update (function)</h3>
+    <p>Every time a meatglue variable on the page is modified in some way, if a <code>update</code> function is defined, it will be run right after the variable's value is saved. All bound values on the page are recomputed and redrawn.
+    <pre class="nondemocode"><code>
+      &lt;script type=&quot;text/meatglue&quot;&gt;
+        update = function{
+          var x = this.get("x"); // get the value of x
+          var gt20 = x > 20; // gt20 is a bool based on x
+          this.set({ x: x*2, gt: gt20 })
+        }
+      &lt;/script&gt;
+    </code></pre>
+
+    <h3>init (function)</h3>
+    <p>If you do some pre-calculation that you want to happen once when the meatglue script runs, you can put that in the <code>init</code> function. Most often, you'll only put a reference to call <code>update()</code>, but you may want to do something more interesting like pulling some data from the internet and setting some values based on that or you may want to do some involved one-time calculation (it's your call).
+    <pre class="nondemocode"><code>
+      &lt;script type=&quot;text/meatglue&quot;&gt;
+        init = function{
+           // a roundabout way of not using the defaults object
+          this.set({ "gt20", true })
+        }
+      &lt;/script&gt;
+    </code></pre>
+
+    <h2>Frontend API</h2>
+    <h3>(for webpage developers)</h3>
+    <p>These are the functions you can use within meatglue. In particular, these are the functions you're most likely to use if you're just dropping meatglue into a page and you're happy with what it has to offer you. You'll either use these functions in <code>init</code> or <code>update</code>.
+    <h3>.set()</h3>
+    <dl>
+      <dt>params
+      <dd>values (object) - an object of values you want to save
+        <pre class="nondemocode"><code>
+          this.set({"foo": 34, bar: "baz"});
+          // sets/updates/creates the values of `foo` and `bar`
+        </code></pre>
+    </dl>
+
+    <h3 id="get">.get()</h3>
+    <dl>
+      <dt>params
+      <dd>varname (string) - the name of the var you'd like the value of
+        <pre class="nondemocode"><code>
+          this.set({foo: 134});
+          var f = this.get("foo");
+          // `f` will be equal to 134;
+        </code></pre>
+    </dl>
+
+    <h3 id="getget">.getget()</h3>
+    <dl>
+      <dt>params
+      <dd>varname (string) - the name of the var you'd like the contained value of 
+        <pre class="nondemocode"><code>
+          this.set({foo: "bar", bar: 122});
+          var f = this.getget("foo");
+          // `f` will be equal to this.get("bar") === 122;
+        </code></pre>
+      <dd>For context, this is mostly used with droppables which assume as their value the name of the element dropped on them.
+    </dl>
+
+    <h3 id="reveal">.reveal()</h3>
+    <dl>
+      <dt>params
+      <dd>section-name (string) - the <code>data-section</code> you would like to unhide.
+        <pre class="nondemocode"><code>
+          &lt;script type=&quot;text/meatglue&quot;&gt;
+            update = function(){
+              var gt = this.get(&quot;foo&quot;) &gt; 23;
+              if (gt) { this.reveal(&quot;success&quot;); }
+            }
+          &lt;/script&gt;
+          
+          &lt;p&gt;&lt;span data-type=&quot;slidable&quot; data-name=&quot;foo&quot;&gt;&lt;/span&gt;&lt;/p&gt;
+          &lt;div data-section=&quot;success&quot;&gt;
+            &lt;p&gt;good work! you enbiggened foo!
+          &lt;/div&gt;
+        </code></pre>
+        <dd>For context, all elements with <code>data-section</code> attributes are hidden by the default css</dd>
+    </dl>
+
+    <h2>Writing New Meatglue Vars/Views</h2>
+    <p>Meatglue Vars are set up mostly like backbone views with some exceptions</p>
+    <pre class="nondemocode"><code>
+      var BinaryVar = VarView.extend({
+        // a BinaryVar tests the truthiness of its variable. If true, it renders
+        // the first child span, if false, it renders the second child span.
+        
+        initialize: function(){
+          VarView.prototype.initialize.call(this);
+        },
+        
+        render: function(){
+          var visIndex = this.val() ? 0 : 1;
+          this.$("span").hide(0).eq(visIndex).show(0);
+        }
+      })
+    </code></pre>
+
+    <p>
+
+
+    <h2>Backend API</h2>
+    <h3>(for meatglue developers)</h3>
+    <p>Since meatglue is currently heavily bound to backbone, you can <em>currently</em> assume that a meatglue variable is effectively the same as a backbone view, so whatever tricks you'd normally do when writing a backbone view are totally valid.
+    <p>This also means that, <em>for now</em>, you also get <code>underscore.js</code> and jQuery (via <code>this.$</code>) for free.
+    <p>In addition to that treasure trove, these are some convenience functions you can use while developing views/variables for meatglue.
+
+    <h3 id="save">.save()</h3>
+    <dl>
+      <dt><strong>requires</strong> -- <code>VarView.prototype.initialize.call(this);</code> within <code>initialize</code>
+      <dt>params
+      <dd>value (anything) - sets the value for this given view. Since views represent a single variable calling <code>this.save("blerg")</code> isn't as ambiguous as it may seem normally.
+        <pre class="nondemocode"><code>
+          if(_.isNumber(blerg)){
+            this.save(blerg);
+          } // saves `blerg` if it's a number
+        </code></pre>
+    </dl>
+
+    <h3 id="val">.val()</h3>
+    <dl>
+      <dt><strong>requires</strong> -- <code>VarView.prototype.initialize.call(this);</code> within <code>initialize</code>
+      <dd>Returns the value of this view
+        <pre class="nondemocode"><code>
+          var current = this.val(); // get whatever value was set for the var
+          this.save( current * 3 ); // save a new value
+        </code></pre>
+    </dl>
+
+    <h3 id="update">.update()</h3>
+    <dl>
+      <dt><strong>requires</strong> -- <code>VarView.prototype.initialize.call(this);</code> within <code>initialize</code>
+      <dd>Calls the user-specified <code>update</code> function if it exists. You should always call this anyway right after save unless you want changes to be silent and triggered by some other view (or at a later time)
+        <pre class="nondemocode"><code>
+          var r2 = this.val() * this.val();
+          this.save( r2 * 3.14159 ); 
+          this.update() // actually get others to notice
+        </code></pre>
+    </dl>
+
+
+    <h2 id="faq">FAQ</h2>
+    <dl>
+      <dt><h3>What's up with the name?</h3>
+      <dd>In the momofuku cookbook, david chang mentions a <a href="http://books.google.com/books?id=hPWiQZt5aRcC&lpg=PT299&ots=Ap0u0_Rx4o&dq=meat%20glue&pg=PT299#v=onepage&q&f=false">chicken brick</a> he lifted from <a href="http://en.wikipedia.org/wiki/Wylie_Dufresne">Wylie Dufresne</a>. The idea is all the bones are removed and all the parts of the chicken are bound together and then fried up like a popsicle. So weird, right? But the thing that made this frankenfood possible was this enzyme called transglutaminase (colloquially, meat glue). </dd>
+      <dd>Here's to making crazy ideas possible!!</dd>
+
+      <dt><h3>Shouldn't i just use Tangle instead?</h3></dt>
+      <dd>Please do! Tangle is fairly mature and is well known! But if you've got a stack that's based largely in jquery and backbone already, you'll save the trouble of adding in mochikit.</dd>
+
+
+      <dt><h3>What exactly got lifted from tangle?</h3>
+      <dd>The idea and the behavior of <code>TKNumberField</code>, <code>TKSwitchPositiveNegative</code> and <code>TKAdjustableNumber</code>. My initial stab at hacking together meatglue was actually just modifying tangle to work within the confines of the <a href="https://github.com/Khan/khan-exercises/">khan-exercise framework</a>. Due to the way <em>that</em> code is set up, it would have involved a good deal of massaging, plus it would have added a whole other set of dependencies to our already heavy exercise page.</dd>
+      <dd>The possibly foolish and entirely ridiculous solution was to reuse much of the components we already had and to also add support for IE8, which we support. I didn't do this to compete with bret victor or anything, it's just that it didn't work at the time for us, so while his toolkit provides a good deal of inspriation, this ended up being coded up to address our very real performance concerns. I wish i could have just lifted tangle directly because wouldn't <em>that</em> have made a great blog post?</dd>
+    </dl>
+
+
+    <h2 id="future-changes">Upcoming Changes</h2>
+    <p>Meatglue is still <em>Pre-v1</em> so lots of things are changing, mostly in response to how well they play out in the khan academy's exercise framework. However, here's a few things that will definitely be changing architecturally:
+    <ul>
+      <li>no more <code>script type="text/meatglue"</code>. This was mostly done to simplify the way that code is loaded by <code>khan-exercises.js</code> but it's totally too clever for its own good and it makes debugging harder than it needs to be in IE.
+      <li>removing/excising most dependencies. As-is, the code is heavily reliant on a slew of libraries, most of which are already present in some form on the khan academy's exercise pages. However, i understand that it's not realistic for everyone to load these suckers up just for interactive giggles.
+    </ul>
+
+
 
   </div> <!--! end of #container -->
 
@@ -262,6 +452,20 @@
   <!-- put your new backbone creation here -->
   <script src="js/meatglue.js"></script>
   <script src="js/script.js"></script>
+
+  <script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-30004115-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+  </script>
   <!-- end scripts-->
 
 </body>
